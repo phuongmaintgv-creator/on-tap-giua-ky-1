@@ -1,5 +1,5 @@
 // Lưu bài vào bộ nhớ đệm: mở 1 lần khi có mạng, sau đó chạy không cần mạng.
-const C = "ON-TAP-GK1-TIN7-4cc19a53", FILES = ["./", "index.html", "manifest.webmanifest", "icon.svg"];
+const C = "ON-TAP-GK1-TIN7-fd096c40", FILES = ["./", "index.html", "manifest.webmanifest", "icon.svg"];
 self.addEventListener("install", e => { e.waitUntil(caches.open(C).then(c => c.addAll(FILES))); self.skipWaiting(); });
 self.addEventListener("activate", e => { e.waitUntil(caches.keys().then(ks => Promise.all(ks.filter(k => k.startsWith("ON-TAP-GK1-TIN7-") && k !== C).map(k => caches.delete(k))))); self.clients.claim(); });
 self.addEventListener("fetch", e => {
