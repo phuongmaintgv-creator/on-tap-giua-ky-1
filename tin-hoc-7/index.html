@@ -1,0 +1,474 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Ôn tập giữa kỳ I — Tin học 7</title>
+<link rel="manifest" href="manifest.webmanifest"><link rel="icon" href="icon.svg"><meta name="theme-color" content="#13235e">
+<style>
+:root{--bg:#0b1640;--bg2:#13235e;--card:#ffffff;--ink:#14204a;--mute:#5b6690;--acc:#ffc93c;--ok:#1fa463;--bad:#e5484d;--pri:#2f6bff;--line:#d9def0}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%}
+body{font-family:"Segoe UI",Roboto,Arial,sans-serif;background:radial-gradient(1200px 600px at 50% -10%,#2a4bb8 0,var(--bg) 60%);color:#fff;min-height:100vh}
+.wrap{max-width:1100px;margin:0 auto;padding:16px}
+header{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+header .grow{min-width:220px}
+header h1{font-size:clamp(20px,3.2vw,34px);margin:0;letter-spacing:.5px}
+header .sub{color:#c9d3ff;font-size:14px}
+.pill{background:rgba(255,255,255,.12);border-radius:999px;padding:6px 12px;font-size:14px}
+.identity{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}.identity .pill{font-size:12px;padding:4px 10px}
+.tacquyen{font-size:11px;color:#9fb0e6;margin-top:6px}
+.grow{flex:1}
+.card{background:var(--card);color:var(--ink);border-radius:18px;padding:20px;box-shadow:0 10px 30px rgba(0,0,0,.25);margin-top:16px}
+.btn{border:0;border-radius:12px;padding:12px 18px;font-size:17px;font-weight:600;cursor:pointer;background:var(--pri);color:#fff}
+.btn:disabled{opacity:.5;cursor:default}
+.btn.ghost{background:#eef1fb;color:var(--ink)}
+.btn.acc{background:var(--acc);color:#1b1b1b}
+.btn.ok{background:var(--ok)}
+.btn.sm{padding:8px 12px;font-size:14px}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px}
+input[type=text],textarea{font-size:18px;padding:10px 12px;border:2px solid var(--line);border-radius:10px;width:100%;font-family:inherit}
+textarea{min-height:150px}
+label{font-weight:600}
+.vong{border:2px solid var(--line);border-radius:14px;padding:14px;cursor:pointer;background:#f7f9ff}
+.vong b{display:block;font-size:18px;margin-bottom:4px}
+.vong.on{border-color:var(--pri);background:#e9f0ff}
+.q{font-size:clamp(19px,2.4vw,26px);font-weight:600;line-height:1.4;margin:6px 0 14px}
+.tag{display:inline-block;max-width:100%;white-space:normal;background:#eef1fb;color:var(--mute);border-radius:8px;padding:3px 8px;font-size:13px;margin-right:6px}
+.opts{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px}
+.opt{border:2px solid var(--line);background:#fff;border-radius:14px;padding:14px 16px;font-size:clamp(17px,2vw,21px);text-align:left;cursor:pointer;color:var(--ink);font-family:inherit}
+.opt:hover{border-color:var(--pri)}
+.opt .k{display:inline-grid;place-items:center;width:30px;height:30px;border-radius:50%;background:#eef1fb;margin-right:10px;font-weight:700}
+.opt.ok{background:#e3f7ec;border-color:var(--ok)}
+.opt.bad{background:#fde8e8;border-color:var(--bad)}
+.timer{height:10px;background:#eef1fb;border-radius:99px;overflow:hidden;margin:8px 0 14px}
+.timer i{display:block;height:100%;background:linear-gradient(90deg,var(--ok),var(--acc),var(--bad));width:100%;transition:width .2s linear}
+.fb{margin-top:14px;padding:12px 14px;border-radius:12px;font-size:17px}
+.fb.ok{background:#e3f7ec;color:#0d5b34}
+.fb.bad{background:#fde8e8;color:#8a1c1f}
+.src{color:var(--mute);font-size:13px;margin-top:6px}
+.tf{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;border-bottom:1px dashed var(--line);padding:10px 0;font-size:clamp(16px,1.9vw,20px)}
+.tf .bt{display:flex;gap:6px}
+.tf button{min-width:58px}
+.sel{outline:3px solid var(--pri)}
+.m-col{display:flex;flex-direction:column;gap:10px}
+.chip{border:2px solid var(--line);border-radius:12px;padding:12px;background:#fff;cursor:pointer;font-size:clamp(15px,1.8vw,19px);color:var(--ink);text-align:left;font-family:inherit}
+.chip.pick{border-color:var(--pri);background:#e9f0ff}
+.chip.done{border-color:var(--ok);background:#e3f7ec;cursor:default}
+.chip.wrong{animation:sh .35s;border-color:var(--bad)}
+@keyframes sh{0%,100%{transform:none}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+.cats{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-top:12px}
+.cat{border:2px dashed #a9b4dc;border-radius:14px;padding:10px;min-height:120px;background:#f7f9ff;cursor:pointer}
+.cat h4{margin:0 0 8px;font-size:17px}
+.cat .chip{margin:4px 0;width:100%}
+.pool{display:flex;flex-wrap:wrap;gap:10px;margin-top:6px}
+.sortl{display:flex;flex-direction:column;gap:8px}
+.sortl .it{display:flex;align-items:center;gap:8px;border:2px solid var(--line);border-radius:12px;padding:8px 10px;background:#fff;font-size:clamp(16px,1.9vw,20px)}
+.sortl .it span{flex:1}
+.sortl .it.ok{border-color:var(--ok);background:#e3f7ec}
+.sortl .it.bad{border-color:var(--bad);background:#fde8e8}
+.score{font-size:64px;font-weight:800;color:var(--pri);text-align:center}
+table{border-collapse:collapse;width:100%;font-size:14px}
+th,td{border:1px solid var(--line);padding:6px 8px;text-align:left;vertical-align:top}
+th{background:#eef1fb}
+.teams{display:flex;gap:8px;flex-wrap:wrap}
+.team{background:rgba(255,255,255,.14);border-radius:12px;padding:6px 12px;font-weight:700}
+.team.now{background:var(--acc);color:#1b1b1b}
+.draft{font-size:12px;color:#c9d3ff;margin-top:18px;text-align:center}
+.hide{display:none!important}
+.prog{font-size:14px;color:var(--mute)}
+.big-emoji{font-size:54px;text-align:center}
+@media (max-width:600px){.wrap{padding:10px}.card{padding:14px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="big-emoji" style="font-size:40px">🔔</div>
+    <div class="grow">
+      <h1 id="hTitle"></h1>
+      <div class="sub" id="hSub"></div>
+      <div class="identity"><span class="pill">TRƯỜNG THCS CHÁNH HƯNG</span><span class="pill">Tổ Tin học</span><span class="pill">Giáo viên: Ngô Thị Phương Mai</span></div>
+      <div class="tacquyen">© 2026 Ngô Thị Phương Mai · Bản quyền nội dung thuộc tác giả</div>
+    </div>
+    <span class="pill" id="hNet"></span>
+    <button class="btn sm ghost" id="btnLog" title="Lịch sử các lượt chơi trên máy này">📒 Lịch sử</button>
+  </header>
+  <div id="teamBar" class="teams hide" style="margin-top:12px"></div>
+  <main id="app"></main>
+  <div class="draft">TRƯỜNG THCS CHÁNH HƯNG · Tổ Tin học · © 2026 Ngô Thị Phương Mai<br>✅ BẢN NHÁP — giáo viên duyệt trước khi dùng · Chạy được khi không có mạng</div>
+</div>
+<script>
+const BAI = {"id": "ON-TAP-GK1-TIN7", "ten": "Ôn tập giữa kỳ I — Tin học 7", "phamvi": "Bài 1 → Bài 4 · Chủ đề 1 Máy tính và cộng đồng · Chủ đề 2 Tổ chức lưu trữ, tìm kiếm và trao đổi thông tin", "so": {"mc": 10, "tf": 4, "th": 4, "tl": 3}, "giay_mc": 25, "giay_tf": 60, "mc": [{"bai": "Bài 1", "muc": "Biết", "q": "Phương án nào chỉ gồm các thiết bị vào?", "opts": ["Bàn phím, chuột", "Micro, máy in", "Máy quét, màn hình", "Máy ảnh số, loa"]}, {"bai": "Bài 1", "muc": "Biết", "q": "Thiết bị nào KHÔNG phải là thiết bị ra?", "opts": ["Máy quét", "Máy vẽ", "Máy in", "Màn hình"]}, {"bai": "Bài 1", "muc": "Biết", "q": "Thiết bị nào đưa âm thanh từ máy tính ra ngoài?", "opts": ["Loa", "Micro", "Máy ảnh", "Màn hình"]}, {"bai": "Bài 1", "muc": "Hiểu", "q": "Máy ảnh nhập dữ liệu dạng nào vào máy tính?", "opts": ["Hình ảnh", "Con số", "Văn bản", "Âm thanh"]}, {"bai": "Bài 1", "muc": "Hiểu", "q": "Tai nghe có gắn micro là loại thiết bị gì?", "opts": ["Vừa là thiết bị vào vừa là thiết bị ra", "Chỉ là thiết bị vào", "Chỉ là thiết bị ra", "Không phải thiết bị vào – ra"]}, {"bai": "Bài 1", "muc": "Vận dụng", "q": "Thao tác nào tắt máy tính an toàn?", "opts": ["Chọn Shut down", "Chọn Restart", "Nhấn giữ công tắc nguồn", "Rút dây nguồn"]}, {"bai": "Bài 1", "muc": "Vận dụng", "q": "Gọi video với bạn, em thấy hình nhưng không nghe tiếng bạn. Em nên làm gì?", "opts": ["Bật loa của mình, nhắc bạn bật micro", "Bật micro của mình, nhắc bạn bật micro", "Bật micro của mình, nhắc bạn bật loa", "Bật loa của mình, nhắc bạn bật loa"]}, {"bai": "Bài 1", "muc": "Vận dụng", "q": "Máy tính không nhận tín hiệu từ chuột có dây. Việc nên làm trước tiên là gì?", "opts": ["Kiểm tra đầu cắm chuột đã cắm chắc, đúng cổng chưa", "Cài lại hệ điều hành", "Thay ngay máy tính khác", "Rút dây nguồn máy tính đang chạy"]}, {"bai": "Bài 2", "muc": "Biết", "q": "Phần mềm nào KHÔNG phải là hệ điều hành?", "opts": ["Windows Explorer", "Windows 7", "Windows 10", "Windows Phone"]}, {"bai": "Bài 2", "muc": "Biết", "q": "Phương án nào có một phần mềm KHÔNG phải hệ điều hành?", "opts": ["Windows, Google Chrome, Linux", "Android, Windows, Linux", "Windows, Linux, macOS", "iOS, Android, Windows Phone"]}, {"bai": "Bài 2", "muc": "Biết", "q": "Phần mở rộng nào là của tệp âm thanh?", "opts": [".mp3", ".sb3", ".avi", ".com"]}, {"bai": "Bài 2", "muc": "Hiểu", "q": "Chức năng nào KHÔNG phải của hệ điều hành?", "opts": ["Tạo, chỉnh sửa nội dung một tệp hình ảnh", "Quản lí các tệp trên đĩa", "Điều khiển các thiết bị vào – ra", "Quản lí giao diện giữa người dùng và máy tính"]}, {"bai": "Bài 2", "muc": "Hiểu", "q": "Giữa hệ điều hành và phần mềm ứng dụng có quan hệ phụ thuộc như thế nào?", "opts": ["Phần mềm ứng dụng phụ thuộc hệ điều hành", "Hệ điều hành phụ thuộc phần mềm ứng dụng", "Phụ thuộc lẫn nhau hai chiều", "Hoàn toàn độc lập với nhau"]}, {"bai": "Bài 2", "muc": "Hiểu", "q": "Phát biểu nào SAI?", "opts": ["Máy tính hoạt động được là phải có phần mềm ứng dụng", "Phần mềm ứng dụng chạy được là phải có hệ điều hành", "Máy tính hoạt động được là phải có hệ điều hành", "Người dùng xử lí yêu cầu cụ thể bằng phần mềm ứng dụng"]}, {"bai": "Bài 3", "muc": "Biết", "q": "Tệp có phần mở rộng .exe là loại tệp gì?", "opts": ["Tệp chương trình máy tính", "Tệp dữ liệu của Word", "Tệp video", "Không có loại tệp này"]}, {"bai": "Bài 3", "muc": "Biết", "q": "Chương trình nào giúp quản lí tệp và thư mục?", "opts": ["File Explorer", "Internet Explorer", "Microsoft Word", "Help"]}, {"bai": "Bài 3", "muc": "Vận dụng", "q": "Mật khẩu nào mạnh nhất?", "opts": ["2n#M1nhKh0a", "12345678", "AnMinhKhoa", "matkhau"]}, {"bai": "Bài 3", "muc": "Vận dụng", "q": "Để dễ tìm lại, em nên đặt tên tệp, thư mục như thế nào?", "opts": ["Dễ nhớ, cho biết bên trong chứa gì", "Theo tên người thân, thú cưng", "Giống hệt ví dụ trong SGK", "Đặt tuỳ ý"]}, {"bai": "Bài 3", "muc": "Vận dụng", "q": "Tên tệp nào HỢP LỆ trong Windows?", "opts": ["BaiTap_Tin7.docx", "Bai?Tap.docx", "Bai*Tap.docx", "Bai:Tap.docx"], "gt": "Tên tệp trong Windows không được chứa các kí tự \\ / : * ? \" < > |"}, {"bai": "Bài 3", "muc": "Vận dụng", "q": "Phần mềm nào giúp bảo vệ máy tính tránh virus?", "opts": ["Windows Defender", "Mozilla Firefox", "Microsoft Windows", "Microsoft Word"]}, {"bai": "Bài 3", "muc": "Hiểu", "q": "Điều nào KHÔNG phải lợi ích của việc tổ chức lưu trữ tệp hợp lí?", "opts": ["Máy tính chạy nhanh hơn", "Tìm tài liệu nhanh hơn", "Dễ quản lí, không nhầm lẫn", "Làm việc chuyên nghiệp hơn"]}, {"bai": "Bài 4", "muc": "Hiểu", "q": "Không nên dùng mạng xã hội cho mục đích nào?", "opts": ["Bình luận xấu về người khác", "Giao lưu với bạn bè", "Học hỏi kiến thức", "Chia sẻ hình ảnh phù hợp của mình"]}, {"bai": "Bài 4", "muc": "Hiểu", "q": "Ưu điểm của mạng xã hội — phương án nào ghép SAI?", "opts": ["Tăng khả năng giao tiếp trực tiếp", "Kết nối người thân, bạn bè", "Hỗ trợ dạy và học", "Cung cấp, cập nhật thông tin nhanh"]}, {"bai": "Bài 4", "muc": "Hiểu", "q": "Nhược điểm của mạng xã hội — phương án nào ghép SAI?", "opts": ["Lan truyền thông tin nhanh và rộng khắp", "Bị dùng để lấy cắp dữ liệu cá nhân", "Ảnh hưởng đến sức khoẻ khi dùng quá nhiều", "Là môi trường cho bắt nạt trực tuyến"]}, {"bai": "Bài 4", "muc": "Hiểu", "q": "Mạng xã hội nào chủ yếu dùng để chia sẻ video?", "opts": ["YouTube", "Zalo", "Instagram", "Scratch"]}, {"bai": "Bài 4", "muc": "Vận dụng", "q": "Một bạn chụp đề thi đăng lên mạng xã hội nhờ người làm hộ. Hậu quả có thể xảy ra là gì?", "opts": ["Bị đình chỉ thi, có thể bị cơ quan chức năng xử lí", "Được cộng điểm vì biết dùng mạng xã hội", "Không ảnh hưởng gì vì chỉ là đăng ảnh", "Chỉ bị bạn bè nhắc nhở"]}, {"bai": "Bài 4", "muc": "Vận dụng", "q": "Em đọc được một tin «nóng» trên mạng nhưng chưa rõ nguồn. Em nên làm gì?", "opts": ["Không chia sẻ, kiểm tra từ nguồn tin chính thống trước", "Chia sẻ ngay cho nhiều người biết", "Bình luận thêm cho tin hấp dẫn hơn", "Sửa lại nội dung rồi chia sẻ"]}], "tf": [{"bai": "Bài 1", "q": "Về thiết bị vào – ra:", "y": [["Bàn phím, chuột, micro, máy quét là thiết bị vào.", true], ["Màn hình, máy in, loa, máy chiếu là thiết bị ra.", true], ["Màn hình cảm ứng vừa là thiết bị vào vừa là thiết bị ra.", true], ["Đĩa cứng là một thiết bị vào – ra.", false, "Đĩa cứng là thiết bị lưu trữ."]]}, {"bai": "Bài 1", "q": "Về sử dụng thiết bị an toàn:", "y": [["Nên cắm nguồn điện trước rồi mới kết nối các thiết bị.", false, "Cắm nguồn sau cùng, khi đã kết nối xong."], ["Tắt máy bằng lệnh Shut down, không ngắt điện đột ngột.", true], ["Có thể để cốc nước sát bàn phím khi làm bài.", false], ["Rút điện trước khi lau chùi máy tính.", true]]}, {"bai": "Bài 2", "q": "Về hệ điều hành và phần mềm ứng dụng:", "y": [["Windows, macOS, Linux, Android, iOS là hệ điều hành.", true], ["Zalo, Gmail, UnikeyNT là phần mềm ứng dụng.", true], ["Phần mềm ứng dụng tương tác với phần cứng thông qua hệ điều hành.", true], ["Hệ điều hành chạy trong môi trường của phần mềm ứng dụng.", false, "Ngược lại: phần mềm ứng dụng chạy trong môi trường hệ điều hành."]]}, {"bai": "Bài 2", "q": "Bạn Nam vừa mua một máy tính mới, chưa có phần mềm nào:", "y": [["Phải cài hệ điều hành trước rồi mới cài phần mềm ứng dụng.", true], ["Có thể cài Scratch trước, cài hệ điều hành sau.", false], ["Khi cài Scratch phải chọn phiên bản phù hợp với hệ điều hành của máy.", true], ["Máy tính chạy được dù không có hệ điều hành.", false]]}, {"bai": "Bài 2", "q": "Về phần mở rộng của tên tệp:", "y": [["Phần mở rộng là các kí tự sau dấu chấm cuối cùng trong tên tệp.", true], ["Phần mở rộng cho biết tệp thuộc loại gì.", true], ["Tệp TapLamVan.doc là tệp video.", false, ".doc là tệp văn bản Word."], ["Tệp .mp4, .avi là tệp video.", true]]}, {"bai": "Bài 3", "q": "Về tệp và thư mục:", "y": [["Tên tệp thường có hai phần: phần tên và phần mở rộng, cách nhau bởi dấu chấm.", true], ["Có thể di chuyển, đổi tên, xoá bất kì tệp và thư mục nào.", false], ["Trong một thư mục có thể tạo hai thư mục con cùng tên.", false], ["Di chuyển tệp sang vị trí khác thì tệp ở chỗ cũ không còn.", true]]}, {"bai": "Bài 3", "q": "Về bảo vệ dữ liệu:", "y": [["Tệp chương trình cũng là dữ liệu, được lưu trong máy tính.", true], ["Sao lưu từ xa (lên đám mây) giúp tránh mất dữ liệu khi hỏng máy.", true], ["Đĩa CD có dung lượng rất lớn.", false, "Đĩa quang dung lượng nhỏ."], ["Phần mềm chống virus cần luôn được bật và cập nhật.", true]]}, {"bai": "Bài 3", "q": "Về thao tác với tệp, thư mục:", "y": [["Sao chép tệp sang vị trí khác thì tệp gốc bị xoá.", false], ["Dùng Rename để đổi tên tệp, thư mục.", true], ["Có thể tự ý xoá tệp .exe của chương trình đang dùng.", false], ["Ctrl+C rồi Ctrl+V dùng để sao chép.", true]]}, {"bai": "Bài 4", "q": "Về mạng xã hội:", "y": [["Mạng xã hội giúp mọi người tương tác mà không cần gặp mặt.", true], ["Tất cả các website đều là mạng xã hội.", false], ["Nhiều mạng xã hội quy định tuổi tối thiểu, phổ biến là 13 tuổi.", true], ["Mạng xã hội luôn tốt vì được tạo ra để trao đổi thông tin.", false, "Mạng xã hội có hai mặt tốt và xấu."]]}], "th": [{"bai": "Bài 1", "t": "cat", "q": "Xếp mỗi thiết bị vào đúng nhóm.", "cats": ["Thiết bị vào", "Thiết bị ra", "Vừa vào vừa ra"], "items": [["Micro", 0], ["Bàn phím", 0], ["Máy quét", 0], ["Loa", 1], ["Máy in", 1], ["Máy chiếu", 1], ["Màn hình cảm ứng", 2], ["Tai nghe có micro", 2]]}, {"bai": "Bài 1", "t": "sort", "q": "Đang làm việc với tệp trên thẻ nhớ, sắp xếp các bước tắt máy an toàn.", "items": ["Lưu tệp", "Đóng tệp", "Chọn Safe To Remove Hardware (tháo thẻ nhớ an toàn)", "Chọn Shut down"]}, {"bai": "Bài 1", "t": "cat", "q": "Việc nào NÊN làm, việc nào KHÔNG NÊN làm khi dùng máy tính?", "cats": ["Nên", "Không nên"], "items": [["Tắt máy bằng Shut down", 0], ["Rút điện trước khi lau máy", 0], ["Cắm nguồn sau khi đã kết nối xong thiết bị", 0], ["Ngắt điện đột ngột khi máy đang chạy", 1], ["Để đồ uống cạnh bàn phím", 1], ["Cắm tai nghe vào cổng bất kì", 1]]}, {"bai": "Bài 2", "t": "match", "q": "Ghép mỗi loại tệp với phần mở rộng của nó.", "p": [["Văn bản Word", ".doc  .docx"], ["Bài trình chiếu PowerPoint", ".ppt  .pptx"], ["Hình ảnh", ".jpg  .png  .bmp"], ["Chương trình Scratch", ".sb  .sb2  .sb3"], ["Trang web", ".htm  .html"], ["Tệp chương trình (ứng dụng)", ".exe  .com  .bat  .msi"]]}, {"bai": "Bài 2", "t": "cat", "q": "Phần mềm nào là hệ điều hành, phần mềm nào là phần mềm ứng dụng?", "cats": ["Hệ điều hành", "Phần mềm ứng dụng"], "items": [["Linux", 0], ["Windows 8", 0], ["Android", 0], ["Gmail", 1], ["UnikeyNT", 1], ["Zalo", 1], ["Windows Media Player", 1], ["Google Chrome", 1]]}, {"bai": "Bài 2", "t": "match", "q": "Ghép nhóm phần mở rộng với loại dữ liệu.", "p": [[".mp3  .wma  .wav", "Âm thanh"], [".jpg  .png  .gif", "Hình ảnh"], [".mp4  .avi  .flv", "Video"]]}, {"bai": "Bài 3", "t": "sort", "q": "Sắp xếp các bước sao chép một thư mục.", "items": ["Mở File Explorer", "Nháy chuột phải vào thư mục cần chép, chọn Copy (Ctrl+C)", "Mở thư mục đích, nháy chuột phải, chọn Paste (Ctrl+V)"]}, {"bai": "Bài 3", "t": "match", "q": "Ghép mỗi việc với lệnh trong File Explorer.", "p": [["Tạo thư mục mới", "New → Folder"], ["Đổi tên", "Rename"], ["Xoá", "Delete"], ["Sao chép", "Copy → Paste"], ["Di chuyển", "Cut → Paste"]]}, {"bai": "Bài 3", "t": "sort", "q": "Xếp các mật khẩu từ YẾU nhất đến MẠNH nhất.", "items": ["12345678", "matkhau", "AnMinhKhoa", "2n#M1nhKh0a"], "gt": "Mật khẩu mạnh: ít nhất 8 kí tự, có chữ số, chữ hoa, chữ thường, kí hiệu đặc biệt, không phải từ thông thường."}, {"bai": "Bài 3", "t": "cat", "q": "Xếp thiết bị lưu trữ theo đặc điểm (Bảng 3.1).", "cats": ["USB, thẻ nhớ", "Đĩa quang (CD, DVD)", "Ổ cứng ngoài", "Lưu trữ đám mây"], "items": [["Nhỏ gọn nhưng dễ rơi mất, dễ lây virus", 0], ["Giá rẻ, khó nhiễm virus, dung lượng nhỏ", 1], ["Dung lượng lớn nhưng to, nặng hơn", 2], ["Truy cập ở mọi nơi nhưng cần Internet", 3]]}, {"bai": "Bài 4", "t": "match", "q": "Ghép mạng xã hội với mục đích sử dụng chính.", "p": [["Facebook", "Giao lưu bạn bè"], ["YouTube", "Chia sẻ video"], ["Instagram", "Chia sẻ ảnh"], ["Scratch", "Diễn đàn học tập"]]}, {"bai": "Bài 4", "t": "sort", "q": "Sắp xếp các bước kết bạn trên Facebook.", "items": ["Nhập tên bạn vào ô tìm kiếm", "Nháy vào ảnh đại diện của bạn để mở trang", "Nháy nút Thêm bạn bè"]}, {"bai": "Bài 4", "t": "cat", "q": "Xếp các việc trên mạng xã hội vào mặt tích cực hoặc tiêu cực.", "cats": ["Tích cực", "Tiêu cực"], "items": [["Kết nối với người thân, bạn bè ở xa", 0], ["Tham gia nhóm học tập, hỏi bài", 0], ["Cập nhật tin tức nhanh từ nguồn chính thống", 0], ["Chia sẻ tin chưa kiểm chứng", 1], ["Bắt nạt, bình luận xấu về người khác", 1], ["Dùng quá nhiều giờ, ảnh hưởng sức khoẻ", 1]]}], "tl": [{"bai": "Bài 1", "muc": "Biết", "t": "mo", "q": "Kể tên 3 thiết bị vào và 3 thiết bị ra của máy tính mà em biết.", "y": ["Kể đúng 3 thiết bị vào (VD: bàn phím, chuột, micro, máy quét, camera)", "Kể đúng 3 thiết bị ra (VD: màn hình, máy in, loa, tai nghe, máy chiếu)"]}, {"bai": "Bài 3", "muc": "Biết", "t": "dien", "q": "Điền vào chỗ trống. Tên tệp TapLamVan.doc gồm:", "o": [{"n": "Phần tên là", "a": ["TapLamVan"]}, {"n": "Phần mở rộng là", "a": ["doc", ".doc"]}]}, {"bai": "Bài 3", "muc": "Vận dụng", "t": "mo", "q": "Nêu ít nhất 3 biện pháp bảo vệ dữ liệu trong máy tính.", "y": ["Sao lưu dữ liệu (cục bộ: USB, ổ cứng ngoài; hoặc từ xa: đám mây)", "Đặt mật khẩu mạnh (ít nhất 8 kí tự, có chữ hoa, chữ thường, chữ số, kí hiệu)", "Cài và luôn bật, cập nhật phần mềm chống virus", "Không tuỳ tiện xoá, di chuyển tệp chương trình"]}, {"bai": "Bài 3", "muc": "Vận dụng", "t": "dien", "q": "Điền tên lệnh trong File Explorer:", "o": [{"n": "Tạo thư mục: chuột phải chỗ trống, chọn New →", "a": ["Folder"]}, {"n": "Xoá thư mục: chọn", "a": ["Delete"]}, {"n": "Đổi tên thư mục: chọn", "a": ["Rename"]}]}, {"bai": "Bài 4", "muc": "Hiểu", "t": "mo", "q": "Chia sẻ thông tin chưa được kiểm chứng trên mạng xã hội có thể gây ra hậu quả gì? Em nên làm gì?", "y": ["Tin sai lan nhanh, gây hiểu lầm, hoang mang cho nhiều người", "Có thể làm tổn hại danh dự người khác", "Người chia sẻ có thể bị kỉ luật, bị xử phạt vì đây là hành vi bị nghiêm cấm", "Em kiểm tra nguồn tin chính thống trước, không chia sẻ tin chưa rõ nguồn"]}, {"bai": "Bài 4", "muc": "Biết", "t": "dien", "q": "Nhiều mạng xã hội quy định độ tuổi tối thiểu để tạo tài khoản, phổ biến là:", "o": [{"n": "Từ … tuổi trở lên", "a": ["13"]}]}], "khoi": "7", "mon": "tin7", "gui_url": "https://script.google.com/macros/s/AKfycbwp5pbI0W4vDrLZbUaOSuNpdTeh5cuZptVkSuIq_VWhjhswSVryoQajxYGjhHOZ2tqQ/exec"};
+const VONG = [
+  {k:"mc", ten:"Vòng 1 · Rung chuông vàng", mo:"Trắc nghiệm nhiều lựa chọn, có tính giờ", icon:"🔔"},
+  {k:"tf", ten:"Vòng 2 · Đúng hay Sai", mo:"Mỗi câu 4 ý a, b, c, d như đề kiểm tra", icon:"✅"},
+  {k:"th", ten:"Vòng 3 · Thực hành", mo:"Ghép đôi, phân loại, sắp xếp thứ tự", icon:"🧩"},
+  {k:"tl", ten:"Vòng 4 · Tự luận ngắn", mo:"Điền kết quả, viết câu trả lời", icon:"✍️"}
+];
+const LOGKEY = "ontap_log_" + BAI.id, QKEY = "ontap_queue_" + BAI.id;
+const $ = s => document.querySelector(s), app = $("#app");
+const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const shuf = a => { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+const norm = s => String(s).toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/đ/g, "d").replace(/[\s.,;:!?'"()]/g, "");
+const lsGet = (k, d) => { try { return JSON.parse(localStorage.getItem(k)) ?? d; } catch (e) { return d; } };
+const lsSet = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} };
+
+$("#hTitle").textContent = BAI.ten;
+$("#hSub").textContent = BAI.phamvi;
+function net() { $("#hNet").textContent = navigator.onLine ? "🟢 Có mạng" : "📴 Không mạng — vẫn chơi được"; }
+addEventListener("online", () => { net(); flush(); }); addEventListener("offline", net); net();
+
+/* ---------- trạng thái ---------- */
+let S = null; // lượt chơi hiện tại
+const qs = new URLSearchParams(location.search);
+
+/* chọn câu: chia đều theo bài để lượt nào cũng phủ đủ nội dung */
+function pick(list, n) {
+  if (!n || n >= list.length) return shuf(list);
+  const by = {}; list.forEach(x => (by[x.bai || "_"] = by[x.bai || "_"] || []).push(x));
+  const keys = Object.keys(by).map(k => (by[k] = shuf(by[k]), k));
+  const out = []; let i = 0;
+  while (out.length < n) { const k = keys[i % keys.length]; if (by[k].length) out.push(by[k].shift()); i++; if (i > n * 20) break; }
+  return shuf(out);
+}
+
+/* ---------- màn mở đầu ---------- */
+function home() {
+  stopTimer();
+  $("#teamBar").classList.add("hide");
+  const tong = BAI.mc.length + BAI.tf.length + BAI.th.length + BAI.tl.length;
+  app.innerHTML = `
+  <div class="card">
+    <div class="row"><span class="tag">Ngân hàng: ${BAI.mc.length} câu trắc nghiệm · ${BAI.tf.length} câu đúng/sai (${BAI.tf.length * 4} ý) · ${BAI.th.length} bài thực hành · ${BAI.tl.length} câu tự luận</span></div>
+    <h2 style="margin:10px 0 6px">Chọn cách chơi</h2>
+    <div class="grid2" id="vongs">${VONG.map((v, i) => `<div class="vong on" data-i="${i}"><b>${v.icon} ${v.ten}</b>${v.mo}</div>`).join("")}</div>
+    <div class="row" style="margin-top:14px">
+      <label><input type="radio" name="sl" value="luot" checked> Một lượt (mỗi vòng ${BAI.so.mc}/${BAI.so.tf}/${BAI.so.th}/${BAI.so.tl} câu, xáo mới mỗi lần)</label>
+      <label><input type="radio" name="sl" value="het"> Ôn hết ngân hàng (${tong} câu)</label>
+    </div>
+    <div class="grid2" style="margin-top:14px">
+      <div><label>Mã học sinh <span style="font-weight:400;color:var(--mute)">(bắt buộc khi chơi một mình · không ghi tên)</span></label><input type="text" id="ma" placeholder="VD ${(BAI.khoi || "6")[0]}A1-01" autocomplete="off" value="${esc(window.ARENA_SID || qs.get("ma") || qs.get("sid") || "")}"><div class="fb bad hide" id="maLoi" style="margin-top:6px;padding:8px 10px;font-size:15px"></div></div>
+      <div><label>Thi đội trên ti vi <span style="font-weight:400;color:var(--mute)">(tùy chọn · 2–6 đội, cách nhau dấu phẩy · khi thi đội không cần mã)</span></label><input type="text" id="doi" placeholder="VD: Đội 1, Đội 2, Đội 3, Đội 4"></div>
+    </div>
+    <div class="row" style="margin-top:16px"><button class="btn acc" id="go">▶ Bắt đầu</button><span class="prog">Mỗi vòng xong có giải thích và nguồn trong sách.</span></div>
+  </div>`;
+  app.querySelectorAll(".vong").forEach(el => el.onclick = () => el.classList.toggle("on"));
+  $("#ma").oninput = () => { $("#maLoi").classList.add("hide"); $("#ma").style.borderColor = ""; };
+  $("#go").onclick = () => {
+    const on = [...app.querySelectorAll(".vong.on")].map(el => VONG[+el.dataset.i].k);
+    if (!on.length) { alert("Chọn ít nhất một vòng."); return; }
+    const het = app.querySelector('input[name=sl]:checked').value === "het";
+    const doi = $("#doi").value.split(",").map(s => s.trim()).filter(Boolean).slice(0, 6);
+    const ma = $("#ma").value.trim().toUpperCase().replace(/\s+/g, "");
+    if (doi.length === 1) { alert("Thi đội cần ít nhất 2 đội, cách nhau dấu phẩy (VD: Đội 1, Đội 2)."); $("#doi").focus(); return; }
+    if (doi.length < 2) {                       // chơi một mình: bắt buộc mã học sinh
+      const k = BAI.khoi || "67";
+      const re = k === "6" ? /^6A(\d{1,2}|P)-\d{2}$/ : k === "7" ? /^7A(\d{1,2}|P)-\d{2}$/ : /^[67]A(\d{1,2}|P)-\d{2}$/;
+      if (!ma) { baoMa("Em nhập mã học sinh trước khi bắt đầu (VD " + k[0] + "A1-01)."); return; }
+      if (!re.test(ma) && /^[67]A(\d{1,2}|P)-\d{2}$/.test(ma)) { baoMa("Đây là bài ôn tập khối " + k[0] + " — mã học sinh phải bắt đầu bằng " + k[0] + "A (em nhập mã khối " + ma[0] + ")."); return; }
+      if (!re.test(ma)) { baoMa("Mã «" + ma + "» chưa đúng dạng. Mã gồm lớp, gạch ngang, số thứ tự 2 chữ số — VD " + k[0] + "A1-01, " + k[0] + "A10-05" + (k.includes("7") ? ", 7AP-03" : "") + "."); return; }
+    }
+    start(on, het, doi.length >= 2 ? "" : ma, doi);
+  };
+}
+
+function baoMa(t) { const e = $("#maLoi"); e.textContent = t; e.classList.remove("hide"); $("#ma").style.borderColor = "var(--bad)"; $("#ma").focus(); }
+function start(vongs, het, ma, doi) {
+  const list = {};
+  vongs.forEach(k => list[k] = het ? shuf(BAI[k]) : pick(BAI[k], BAI.so[k]));
+  S = { vongs, list, vi: 0, qi: 0, ma, doi: doi.length >= 2 ? doi.map(t => ({ ten: t, d: 0 })) : null, turn: 0,
+        diem: {}, toi: {}, sai: [], bat: Date.now(), het };
+  vongs.forEach(k => { S.diem[k] = 0; S.toi[k] = 0; });
+  intro();
+}
+
+function teamBar() {
+  const b = $("#teamBar");
+  if (!S.doi) { b.classList.add("hide"); return; }
+  b.classList.remove("hide");
+  b.innerHTML = S.doi.map((t, i) => `<span class="team ${i === S.turn ? "now" : ""}">${esc(t.ten)}: ${Math.round(t.d * 100) / 100}</span>`).join("");
+}
+function cong(k, dat, toi) { S.diem[k] += dat; S.toi[k] += toi; if (S.doi) S.doi[S.turn].d += dat; }
+function nextTurn() { if (S.doi) S.turn = (S.turn + 1) % S.doi.length; }
+
+function intro() {
+  stopTimer();
+  const k = S.vongs[S.vi], v = VONG.find(x => x.k === k);
+  teamBar();
+  app.innerHTML = `<div class="card" style="text-align:center"><div class="big-emoji">${v.icon}</div><h2>${v.ten}</h2><p style="font-size:18px">${v.mo} — ${S.list[k].length} câu</p><button class="btn acc" id="go">Vào vòng</button></div>`;
+  $("#go").onclick = () => { S.qi = 0; show(); };
+}
+
+function show() {
+  const k = S.vongs[S.vi], it = S.list[k][S.qi];
+  if (!it) { S.vi++; if (S.vi < S.vongs.length) intro(); else finish(); return; }
+  teamBar();
+  ({ mc: showMC, tf: showTF, th: showTH, tl: showTL })[k](it);
+}
+function head(k, it) {
+  const n = S.list[k].length, who = S.doi ? ` · Lượt: <b>${esc(S.doi[S.turn].ten)}</b>` : "";
+  return `<div class="row"><span class="prog">${VONG.find(x => x.k === k).ten} · Câu ${S.qi + 1}/${n}${who}</span><span class="grow"></span>${BAI.an_nhan ? "" : (it.bai ? `<span class="tag">${esc(it.bai)}</span>` : "") + (it.muc ? `<span class="tag">${esc(it.muc)}</span>` : "")}</div>`;
+}
+function nextBtn() { return `<div class="row" style="margin-top:14px"><button class="btn" id="nx">Câu tiếp ➜</button></div>`; }
+function bindNext() { const b = $("#nx"); b.onclick = () => { nextTurn(); S.qi++; show(); }; b.focus(); }
+
+/* ---------- đồng hồ ---------- */
+let T = null;
+function startTimer(sec, onEnd) {
+  stopTimer(); const bar = $("#tbar"), t0 = Date.now();
+  T = setInterval(() => { const r = 1 - (Date.now() - t0) / (sec * 1000); if (bar) bar.style.width = Math.max(0, r * 100) + "%"; const tx = $("#tsec"); if (tx) tx.textContent = Math.max(0, Math.ceil(r * sec)) + " giây"; if (r <= 0) { stopTimer(); onEnd(); } }, 200);
+}
+function stopTimer() { if (T) clearInterval(T); T = null; }
+
+/* ---------- vòng 1: trắc nghiệm ---------- */
+function showMC(it) {
+  const opts = shuf(it.opts.map((t, i) => ({ t, ok: i === 0 })));
+  app.innerHTML = `<div class="card">${head("mc", it)}<div class="q">${esc(it.q)}</div>
+    <div class="timer"><i id="tbar"></i></div><div class="prog" id="tsec"></div>
+    <div class="opts">${opts.map((o, i) => `<button class="opt" data-i="${i}"><span class="k">${"ABCD"[i]}</span>${esc(o.t)}</button>`).join("")}</div><div id="fb"></div></div>`;
+  let done = false;
+  const end = (i) => {
+    if (done) return; done = true; stopTimer();
+    const btns = app.querySelectorAll(".opt");
+    btns.forEach((b, j) => { b.disabled = true; if (opts[j].ok) b.classList.add("ok"); });
+    const ok = i != null && opts[i].ok;
+    if (i != null && !ok) btns[i].classList.add("bad");
+    cong("mc", ok ? 1 : 0, 1);
+    if (!ok) S.sai.push("TN: " + it.q.slice(0, 60));
+    $("#fb").outerHTML = `<div class="fb ${ok ? "ok" : "bad"}">${ok ? "🎉 Chính xác!" : (i == null ? "⏰ Hết giờ! " : "Chưa đúng. ") + "Đáp án: <b>" + esc(it.opts[0]) + "</b>"}${it.gt ? `<div>${esc(it.gt)}</div>` : ""}${it.src ? `<div class="src">📖 ${esc(it.src)}</div>` : ""}</div>` + nextBtn();
+    bindNext();
+  };
+  app.querySelectorAll(".opt").forEach(b => b.onclick = () => end(+b.dataset.i));
+  startTimer(it.giay || BAI.giay_mc || 25, () => end(null));
+}
+
+/* ---------- vòng 2: đúng / sai ---------- */
+function showTF(it) {
+  const ys = it.y.map((y, i) => ({ t: y[0], d: y[1], g: y[2] || "", n: "abcd"[i] }));
+  const ans = {};
+  app.innerHTML = `<div class="card">${head("tf", it)}<div class="q">${esc(it.q)}</div>
+    <div class="timer"><i id="tbar"></i></div><div class="prog" id="tsec"></div>
+    <div id="tfl">${ys.map((y, i) => `<div class="tf" data-i="${i}"><div><b>${y.n})</b> ${esc(y.t)}<div class="src gx hide"></div></div><div class="bt"><button class="btn ghost sm" data-v="1">Đúng</button><button class="btn ghost sm" data-v="0">Sai</button></div></div>`).join("")}</div>
+    <div class="row" style="margin-top:12px"><button class="btn ok" id="chk">Chốt đáp án</button></div><div id="fb"></div></div>`;
+  app.querySelectorAll(".tf").forEach(r => r.querySelectorAll("button").forEach(b => b.onclick = () => {
+    ans[r.dataset.i] = b.dataset.v === "1"; r.querySelectorAll("button").forEach(x => x.classList.remove("sel")); b.classList.add("sel");
+  }));
+  let done = false;
+  const end = () => {
+    if (done) return; done = true; stopTimer();
+    let dung = 0;
+    app.querySelectorAll(".tf").forEach(r => {
+      const y = ys[r.dataset.i], a = ans[r.dataset.i], ok = a === y.d; if (ok) dung++;
+      r.style.background = ok ? "#e3f7ec" : "#fde8e8";
+      r.querySelectorAll("button").forEach(b => { b.disabled = true; if ((b.dataset.v === "1") === y.d) b.classList.add("ok"); });
+      const g = r.querySelector(".gx"); g.classList.remove("hide"); g.textContent = (y.d ? "Đúng" : "Sai") + (y.g ? " — " + y.g : "");
+      if (!ok) S.sai.push("ĐS: " + y.t.slice(0, 60));
+    });
+    cong("tf", dung / 4, 1);
+    $("#chk").remove();
+    $("#fb").outerHTML = `<div class="fb ${dung === 4 ? "ok" : "bad"}">Đúng ${dung}/4 ý.${it.src ? `<div class="src">📖 ${esc(it.src)}</div>` : ""}</div>` + nextBtn();
+    bindNext();
+  };
+  $("#chk").onclick = end;
+  startTimer(it.giay || BAI.giay_tf || 60, end);
+}
+
+/* ---------- vòng 3: thực hành ---------- */
+function showTH(it) {
+  const box = `<div class="card">${head("th", it)}<div class="q">${esc(it.q)}</div><div id="th"></div><div id="fb"></div></div>`;
+  app.innerHTML = box;
+  ({ match: thMatch, cat: thCat, sort: thSort })[it.t](it, $("#th"));
+}
+function thDone(it, dat, toi, msg) {
+  cong("th", dat / toi, 1);
+  $("#fb").outerHTML = `<div class="fb ${dat === toi ? "ok" : "bad"}">${msg}${it.gt ? `<div>${esc(it.gt)}</div>` : ""}${it.src ? `<div class="src">📖 ${esc(it.src)}</div>` : ""}</div>` + nextBtn();
+  bindNext();
+}
+function thMatch(it, el) {
+  const L = shuf(it.p.map((p, i) => ({ t: p[0], i }))), R = shuf(it.p.map((p, i) => ({ t: p[1], i })));
+  el.innerHTML = `<p class="prog">Bấm một thẻ bên trái rồi bấm thẻ khớp bên phải.</p><div class="grid2"><div class="m-col" id="ml">${L.map(x => `<button class="chip" data-i="${x.i}">${esc(x.t)}</button>`).join("")}</div><div class="m-col" id="mr">${R.map(x => `<button class="chip" data-i="${x.i}">${esc(x.t)}</button>`).join("")}</div></div>`;
+  let pick = null, sai = new Set(), xong = 0;
+  el.querySelectorAll("#ml .chip").forEach(b => b.onclick = () => { if (b.classList.contains("done")) return; el.querySelectorAll("#ml .chip").forEach(x => x.classList.remove("pick")); b.classList.add("pick"); pick = b; });
+  el.querySelectorAll("#mr .chip").forEach(b => b.onclick = () => {
+    if (!pick || b.classList.contains("done")) return;
+    if (pick.dataset.i === b.dataset.i) { pick.classList.remove("pick"); pick.classList.add("done"); b.classList.add("done"); pick = null; xong++;
+      if (xong === it.p.length) { const d = it.p.length - sai.size; thDone(it, d, it.p.length, `Hoàn thành! Ghép đúng ngay lần đầu ${d}/${it.p.length} cặp.`); } }
+    else { sai.add(pick.dataset.i); S.sai.push("Ghép: " + it.p[pick.dataset.i][0].slice(0, 40)); [pick, b].forEach(x => { x.classList.remove("wrong"); void x.offsetWidth; x.classList.add("wrong"); }); }
+  });
+}
+function thCat(it, el) {
+  const items = shuf(it.items.map((x, i) => ({ t: x[0], c: x[1], i })));
+  const where = {};
+  el.innerHTML = `<p class="prog">Bấm một thẻ rồi bấm vào ô đúng của nó. Xếp xong bấm «Kiểm tra».</p><div class="pool" id="pool"></div>
+    <div class="cats">${it.cats.map((c, j) => `<div class="cat" data-c="${j}"><h4>${esc(c)}</h4><div class="in"></div></div>`).join("")}</div>
+    <div class="row" style="margin-top:12px"><button class="btn ok" id="chk">Kiểm tra</button></div>`;
+  let pick = null;
+  const draw = () => {
+    $("#pool").innerHTML = items.filter(x => where[x.i] == null).map(x => `<button class="chip ${pick === x.i ? "pick" : ""}" data-i="${x.i}">${esc(x.t)}</button>`).join("") || `<span class="prog">Đã xếp hết thẻ.</span>`;
+    el.querySelectorAll(".cat").forEach(c => c.querySelector(".in").innerHTML = items.filter(x => where[x.i] === +c.dataset.c).map(x => `<button class="chip ${pick === x.i ? "pick" : ""}" data-i="${x.i}">${esc(x.t)}</button>`).join(""));
+    el.querySelectorAll(".chip").forEach(b => b.onclick = e => { e.stopPropagation(); if (lock) return; pick = +b.dataset.i; draw(); });
+  };
+  let lock = false;
+  el.querySelectorAll(".cat").forEach(c => c.onclick = () => { if (lock || pick == null) return; where[pick] = +c.dataset.c; pick = null; draw(); });
+  draw();
+  $("#chk").onclick = () => {
+    if (items.some(x => where[x.i] == null)) { alert("Còn thẻ chưa xếp."); return; }
+    lock = true; let d = 0;
+    el.querySelectorAll(".cat .chip").forEach(b => { const x = items.find(y => y.i === +b.dataset.i); const ok = x.c === where[x.i]; if (ok) d++; else { S.sai.push("Phân loại: " + x.t.slice(0, 40)); b.textContent += " → " + it.cats[x.c]; } b.classList.add(ok ? "done" : "wrong"); b.style.background = ok ? "" : "#fde8e8"; });
+    $("#chk").remove();
+    thDone(it, d, items.length, `Xếp đúng ${d}/${items.length} thẻ.`);
+  };
+}
+function thSort(it, el) {
+  let ord = shuf(it.items.map((t, i) => ({ t, i })));
+  if (ord.every((x, k) => x.i === k)) ord.reverse();
+  const draw = (lock) => {
+    el.innerHTML = `<p class="prog">Dùng nút ▲ ▼ để đưa về đúng thứ tự. Xong bấm «Kiểm tra».</p><div class="sortl">${ord.map((x, k) => `<div class="it" data-k="${k}"><b>${k + 1}.</b><span>${esc(x.t)}</span>${lock ? "" : `<button class="btn ghost sm" data-u="${k}">▲</button><button class="btn ghost sm" data-d="${k}">▼</button>`}</div>`).join("")}</div>${lock ? "" : `<div class="row" style="margin-top:12px"><button class="btn ok" id="chk">Kiểm tra</button></div>`}`;
+    if (lock) return;
+    el.querySelectorAll("[data-u]").forEach(b => b.onclick = () => { const k = +b.dataset.u; if (k > 0) { [ord[k - 1], ord[k]] = [ord[k], ord[k - 1]]; draw(); } });
+    el.querySelectorAll("[data-d]").forEach(b => b.onclick = () => { const k = +b.dataset.d; if (k < ord.length - 1) { [ord[k + 1], ord[k]] = [ord[k], ord[k + 1]]; draw(); } });
+    $("#chk").onclick = () => {
+      draw(true); let d = 0;
+      el.querySelectorAll(".it").forEach((r, k) => { const ok = ord[k].i === k; if (ok) d++; r.classList.add(ok ? "ok" : "bad"); });
+      if (d < ord.length) S.sai.push("Sắp xếp: " + it.q.slice(0, 50));
+      thDone(it, d, ord.length, `Đúng vị trí ${d}/${ord.length}. Thứ tự đúng: ${it.items.map(esc).join(" → ")}`);
+    };
+  };
+  draw(false);
+}
+
+/* ---------- vòng 4: tự luận ---------- */
+function showTL(it) {
+  if (it.t === "mo") return showOpen(it);
+  app.innerHTML = `<div class="card">${head("tl", it)}<div class="q">${esc(it.q)}</div>
+    <div class="grid2">${it.o.map((o, i) => `<div><label>${esc(o.n)}</label><input type="text" data-i="${i}" autocomplete="off"></div>`).join("")}</div>
+    <div class="row" style="margin-top:12px"><button class="btn ok" id="chk">Nộp câu trả lời</button></div><div id="fb"></div></div>`;
+  const ins = app.querySelectorAll("input"); ins[0].focus();
+  ins.forEach(x => x.onkeydown = e => { if (e.key === "Enter") $("#chk").click(); });
+  $("#chk").onclick = () => {
+    let d = 0;
+    ins.forEach(x => { const o = it.o[+x.dataset.i], v = norm(x.value); const ok = o.a.some(a => norm(a) === v); if (ok) d++; else S.sai.push("TL: " + o.n.slice(0, 40)); x.style.borderColor = ok ? "var(--ok)" : "var(--bad)"; x.disabled = true; if (!ok) x.value += "   ✗ đáp án: " + o.a[0]; });
+    cong("tl", d / it.o.length, 1);
+    $("#chk").remove();
+    $("#fb").outerHTML = `<div class="fb ${d === it.o.length ? "ok" : "bad"}">Đúng ${d}/${it.o.length} ô.${it.gt ? `<div>${esc(it.gt)}</div>` : ""}${it.src ? `<div class="src">📖 ${esc(it.src)}</div>` : ""}</div>` + nextBtn();
+    bindNext();
+  };
+}
+function showOpen(it) {
+  app.innerHTML = `<div class="card">${head("tl", it)}<div class="q">${esc(it.q)}</div>
+    <textarea id="tv" placeholder="Viết câu trả lời của em ở đây…"></textarea><div class="prog" id="dem"></div>
+    <div class="row" style="margin-top:12px"><button class="btn ok" id="chk">Xem gợi ý và tự chấm</button></div><div id="fb"></div></div>`;
+  const tv = $("#tv"), cau = () => tv.value.split(/[.!?…]+/).map(s => s.trim()).filter(s => s.split(/\s+/).length >= 3).length;
+  tv.oninput = () => $("#dem").textContent = `Em đã viết khoảng ${cau()} câu.` + (it.cau ? ` Yêu cầu: ${it.cau[0]}–${it.cau[1]} câu.` : "");
+  tv.focus();
+  $("#chk").onclick = () => {
+    tv.disabled = true; $("#chk").remove();
+    const c = cau(), dCau = it.cau ? (c >= it.cau[0] && c <= it.cau[1]) : null;
+    $("#fb").outerHTML = `<div class="fb ok"><b>Gợi ý — em đánh dấu những ý mình đã viết được:</b>
+      ${it.y.map((y, i) => `<div><label style="font-weight:400"><input type="checkbox" data-i="${i}"> ${esc(y)}</label></div>`).join("")}
+      ${dCau != null ? `<div style="margin-top:6px">${dCau ? "✔" : "✗"} Độ dài: ${c} câu (yêu cầu ${it.cau[0]}–${it.cau[1]} câu)</div>` : ""}
+      ${it.mau ? `<details style="margin-top:8px"><summary>Xem đoạn văn mẫu</summary><p>${esc(it.mau)}</p></details>` : ""}
+      ${it.src ? `<div class="src">📖 ${esc(it.src)}</div>` : ""}</div>
+      <div class="row" style="margin-top:14px"><button class="btn" id="nx">Chấm xong ➜</button></div>`;
+    $("#nx").onclick = () => {
+      const k = app.querySelectorAll('input[type=checkbox]:checked').length, tot = it.y.length + (dCau != null ? 1 : 0);
+      const d = (k + (dCau ? 1 : 0)) / tot; cong("tl", d, 1);
+      if (d < 1) S.sai.push("Tự luận: " + it.q.slice(0, 40));
+      S.tl_bai = S.tl_bai || []; S.tl_bai.push(tv.value.slice(0, 500));
+      nextTurn(); S.qi++; show();
+    };
+  };
+}
+
+/* ---------- tổng kết + ghi vết ---------- */
+function finish() {
+  stopTimer();
+  let dat = 0, toi = 0; S.vongs.forEach(k => { dat += S.diem[k]; toi += S.toi[k]; });
+  const thang10 = toi ? Math.round(dat / toi * 100) / 10 : 0;
+  const rec = { rid: BAI.id + "-" + Date.now().toString(36) + "-" + Math.random().toString(36).slice(2, 7), bai: BAI.id, ten: BAI.ten, ma: S.ma || (S.doi ? "THI-DOI" : ""), luc: new Date().toISOString(), giay: Math.round((Date.now() - S.bat) / 1000),
+    diem10: thang10, vong: Object.fromEntries(S.vongs.map(k => [k, `${Math.round(S.diem[k] * 100) / 100}/${S.toi[k]}`])),
+    doi: S.doi ? S.doi.map(t => t.ten + ": " + Math.round(t.d * 100) / 100) : null, sai: S.sai.slice(0, 40), het: S.het };
+  const log = lsGet(LOGKEY, []); log.push(rec); lsSet(LOGKEY, log.slice(-500));
+  teamBar();
+  const msg = thang10 >= 8 ? "Xuất sắc! 🏆" : thang10 >= 6.5 ? "Tốt lắm! 👍" : thang10 >= 5 ? "Đạt — ôn thêm chỗ sai nhé 💪" : "Cần ôn lại — chơi thêm lượt nữa nhé 📚";
+  const xh = S.doi ? S.doi.slice().sort((a, b) => b.d - a.d) : null;
+  app.innerHTML = `<div class="card"><h2 style="text-align:center;margin:0">Tổng kết</h2>
+    ${xh ? `<div class="big-emoji">🏆</div><h2 style="text-align:center">${esc(xh[0].ten)} dẫn đầu</h2><table><tr><th>Hạng</th><th>Đội</th><th>Điểm</th></tr>${xh.map((t, i) => `<tr><td>${i + 1}</td><td>${esc(t.ten)}</td><td>${Math.round(t.d * 100) / 100}</td></tr>`).join("")}</table>` :
+      `<div class="score">${thang10.toString().replace(".", ",")}</div><p style="text-align:center;font-size:20px">${msg}</p>`}
+    <table style="margin-top:12px"><tr><th>Vòng</th><th>Kết quả</th></tr>${S.vongs.map(k => `<tr><td>${VONG.find(v => v.k === k).ten}</td><td>${Math.round(S.diem[k] * 100) / 100} / ${S.toi[k]}</td></tr>`).join("")}</table>
+    ${S.sai.length ? `<details style="margin-top:12px"><summary>Các ý cần ôn lại (${S.sai.length})</summary><ul>${S.sai.map(s => `<li>${esc(s)}</li>`).join("")}</ul></details>` : ""}
+    <p class="prog" id="gui">${S.ma ? "Đang lưu và gửi kết quả…" : "Kết quả đã lưu trên máy này (📒 Lịch sử)."}</p>
+    <div class="row"><button class="btn acc" id="again">🔁 Chơi lượt mới</button><button class="btn ghost" id="hm">Về đầu</button></div></div>`;
+  $("#again").onclick = () => start(S.vongs, S.het, S.ma, S.doi ? S.doi.map(t => t.ten) : []);
+  $("#hm").onclick = home;
+  send(rec);
+}
+
+/* Gửi kết quả — giống các bài tập của Đấu trường:
+   lưu ngay trên máy (hàng chờ), có mạng thì tự gửi; mất mạng giữa chừng không mất bài.
+   Mỗi lượt có mã riêng (rid) để bảng điểm không ghi trùng khi gửi lại. */
+const GUI_URL = BAI.gui_url || "";
+/* Gói kết quả theo đúng mẫu ACTIVITY_RESULTS của Đấu trường: mode «review» = Ôn tập (chuyên cần tính riêng). */
+function goiDauTruong(r) {
+  const parts = Object.values(r.vong || {}).map(v => String(v).split("/").map(Number));
+  const dat = parts.reduce((a, x) => a + (x[0] || 0), 0), toi = parts.reduce((a, x) => a + (x[1] || 0), 0);
+  return { eventId: r.rid, mode: "review", subject: BAI.mon, grade: Number(BAI.khoi || 6), lessonId: BAI.id, lessonNo: 0,
+    lessonTitle: BAI.ten, studentId: r.ma, score: r.diem10, correct: Math.round(dat), total: toi,
+    durationSeconds: r.giay, startedAtMs: Date.parse(r.luc) - r.giay * 1000 };
+}
+function send(rec) {
+  if (!rec.ma || rec.ma === "THI-DOI") { flush(); return; }          // thi đội: chỉ lưu trên máy
+  const q = lsGet(QKEY, []); q.push(rec); lsSet(QKEY, q.slice(-300)); flush();
+}
+function trangThai(t) { const g = $("#gui"); if (g) g.textContent = t; }
+let dangGui = false;
+async function flush() {
+  const q = lsGet(QKEY, []);
+  const choGui = q.length;
+  if (!choGui) return;
+  const gs = window.google && google.script && google.script.run;   // mở ngay trong Web App Đấu trường
+  if (!GUI_URL && !gs) { trangThai(`Kết quả đã lưu trên máy (${choGui} lượt chờ gửi).`); return; }
+  if (!navigator.onLine) { trangThai(`📴 Chưa có mạng — đã lưu trên máy, có mạng em sẽ tự gửi (${choGui} lượt chờ).`); return; }
+  if (dangGui) return; dangGui = true;
+  const con = [];
+  for (const r of q) {
+    try {
+      const goi = goiDauTruong(r);
+      if (gs) await new Promise((ok, loi) => google.script.run.withSuccessHandler(x => (x && x.ok === false) ? loi(new Error(x.message)) : ok(x)).withFailureHandler(loi).saveArenaOfflineResult(goi));
+      else await fetch(GUI_URL, { method: "POST", mode: "no-cors", headers: { "Content-Type": "text/plain;charset=utf-8" },
+        body: JSON.stringify({ action: "ontap_result", data: goi }) });
+      const log = lsGet(LOGKEY, []); const x = log.find(y => y.rid === r.rid); if (x) { x.da_gui = new Date().toISOString(); lsSet(LOGKEY, log); }
+    } catch (e) { con.push(r); }
+  }
+  const moi = lsGet(QKEY, []).filter(r => !q.some(y => y.rid === r.rid));   // lượt mới thêm trong lúc gửi
+  lsSet(QKEY, con.concat(moi)); dangGui = false;
+  trangThai(con.length ? `Chưa gửi được ${con.length} lượt — em sẽ thử lại khi có mạng.` : "✔ Đã gửi kết quả về Đấu trường.");
+}
+addEventListener("message", e => { if (e.data && e.data.type === "ONTAP_ACK" && e.data.rid) lsSet(QKEY, lsGet(QKEY, []).filter(r => r.rid !== e.data.rid)); });
+setInterval(flush, 30000); setTimeout(flush, 1500);
+document.addEventListener("visibilitychange", () => { if (!document.hidden) flush(); });
+if ("serviceWorker" in navigator && location.protocol.startsWith("http") && !(window.google && google.script)) navigator.serviceWorker.register("sw.js").catch(() => {});
+
+/* ---------- lịch sử trên máy (cho giáo viên) ---------- */
+$("#btnLog").onclick = () => {
+  stopTimer();
+  const log = lsGet(LOGKEY, []).slice().reverse();
+  app.innerHTML = `<div class="card"><div class="row"><h2 style="margin:0">📒 Lịch sử lượt chơi trên máy này (${log.length})</h2><span class="grow"></span><button class="btn sm" id="csv">Tải CSV</button><button class="btn sm ghost" id="hm">Đóng</button></div>
+    <div style="overflow:auto;margin-top:10px"><table><tr><th>Lúc</th><th>Mã / Đội</th><th>Điểm /10</th><th>Từng vòng</th><th>Thời gian</th><th>Ý sai</th><th>Gửi</th></tr>
+    ${log.map(r => `<tr><td>${new Date(r.luc).toLocaleString("vi-VN")}</td><td>${esc(r.ma || "—")}${r.doi ? "<br>" + r.doi.map(esc).join("<br>") : ""}</td><td><b>${r.diem10}</b></td><td>${Object.entries(r.vong).map(([k, v]) => k.toUpperCase() + " " + v).join("<br>")}</td><td>${Math.floor(r.giay / 60)}′${r.giay % 60}″</td><td>${r.sai.length}</td><td>${r.da_gui ? "✔" : (r.ma && r.ma !== "THI-DOI" ? "⏳" : "—")}</td></tr>`).join("")}</table></div>
+    <div class="row" style="margin-top:10px"><button class="btn sm ghost" id="xoa">Xoá lịch sử trên máy</button></div></div>`;
+  $("#hm").onclick = home;
+  $("#xoa").onclick = () => { if (confirm("Xoá toàn bộ lịch sử lượt chơi trên máy này?")) { lsSet(LOGKEY, []); $("#btnLog").click(); } };
+  $("#csv").onclick = () => {
+    const rows = [["luc", "ma", "diem10", "vong", "giay", "so_y_sai", "y_sai"]].concat(log.map(r => [r.luc, r.ma, r.diem10, Object.entries(r.vong).map(([k, v]) => k + " " + v).join(" | "), r.giay, r.sai.length, r.sai.join(" | ")]));
+    const csv = "﻿" + rows.map(r => r.map(c => `"${String(c).replace(/"/g, '""')}"`).join(",")).join("\n");
+    const a = document.createElement("a"); a.href = URL.createObjectURL(new Blob([csv], { type: "text/csv" })); a.download = BAI.id + "_lich-su.csv"; a.click();
+  };
+};
+
+home();
+</script>
+</body>
+</html>

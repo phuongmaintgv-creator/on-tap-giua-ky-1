@@ -1,0 +1,474 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Ôn tập giữa kỳ I — Tin học 6</title>
+<link rel="manifest" href="manifest.webmanifest"><link rel="icon" href="icon.svg"><meta name="theme-color" content="#13235e">
+<style>
+:root{--bg:#0b1640;--bg2:#13235e;--card:#ffffff;--ink:#14204a;--mute:#5b6690;--acc:#ffc93c;--ok:#1fa463;--bad:#e5484d;--pri:#2f6bff;--line:#d9def0}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%}
+body{font-family:"Segoe UI",Roboto,Arial,sans-serif;background:radial-gradient(1200px 600px at 50% -10%,#2a4bb8 0,var(--bg) 60%);color:#fff;min-height:100vh}
+.wrap{max-width:1100px;margin:0 auto;padding:16px}
+header{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+header .grow{min-width:220px}
+header h1{font-size:clamp(20px,3.2vw,34px);margin:0;letter-spacing:.5px}
+header .sub{color:#c9d3ff;font-size:14px}
+.pill{background:rgba(255,255,255,.12);border-radius:999px;padding:6px 12px;font-size:14px}
+.identity{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}.identity .pill{font-size:12px;padding:4px 10px}
+.tacquyen{font-size:11px;color:#9fb0e6;margin-top:6px}
+.grow{flex:1}
+.card{background:var(--card);color:var(--ink);border-radius:18px;padding:20px;box-shadow:0 10px 30px rgba(0,0,0,.25);margin-top:16px}
+.btn{border:0;border-radius:12px;padding:12px 18px;font-size:17px;font-weight:600;cursor:pointer;background:var(--pri);color:#fff}
+.btn:disabled{opacity:.5;cursor:default}
+.btn.ghost{background:#eef1fb;color:var(--ink)}
+.btn.acc{background:var(--acc);color:#1b1b1b}
+.btn.ok{background:var(--ok)}
+.btn.sm{padding:8px 12px;font-size:14px}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px}
+input[type=text],textarea{font-size:18px;padding:10px 12px;border:2px solid var(--line);border-radius:10px;width:100%;font-family:inherit}
+textarea{min-height:150px}
+label{font-weight:600}
+.vong{border:2px solid var(--line);border-radius:14px;padding:14px;cursor:pointer;background:#f7f9ff}
+.vong b{display:block;font-size:18px;margin-bottom:4px}
+.vong.on{border-color:var(--pri);background:#e9f0ff}
+.q{font-size:clamp(19px,2.4vw,26px);font-weight:600;line-height:1.4;margin:6px 0 14px}
+.tag{display:inline-block;max-width:100%;white-space:normal;background:#eef1fb;color:var(--mute);border-radius:8px;padding:3px 8px;font-size:13px;margin-right:6px}
+.opts{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px}
+.opt{border:2px solid var(--line);background:#fff;border-radius:14px;padding:14px 16px;font-size:clamp(17px,2vw,21px);text-align:left;cursor:pointer;color:var(--ink);font-family:inherit}
+.opt:hover{border-color:var(--pri)}
+.opt .k{display:inline-grid;place-items:center;width:30px;height:30px;border-radius:50%;background:#eef1fb;margin-right:10px;font-weight:700}
+.opt.ok{background:#e3f7ec;border-color:var(--ok)}
+.opt.bad{background:#fde8e8;border-color:var(--bad)}
+.timer{height:10px;background:#eef1fb;border-radius:99px;overflow:hidden;margin:8px 0 14px}
+.timer i{display:block;height:100%;background:linear-gradient(90deg,var(--ok),var(--acc),var(--bad));width:100%;transition:width .2s linear}
+.fb{margin-top:14px;padding:12px 14px;border-radius:12px;font-size:17px}
+.fb.ok{background:#e3f7ec;color:#0d5b34}
+.fb.bad{background:#fde8e8;color:#8a1c1f}
+.src{color:var(--mute);font-size:13px;margin-top:6px}
+.tf{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;border-bottom:1px dashed var(--line);padding:10px 0;font-size:clamp(16px,1.9vw,20px)}
+.tf .bt{display:flex;gap:6px}
+.tf button{min-width:58px}
+.sel{outline:3px solid var(--pri)}
+.m-col{display:flex;flex-direction:column;gap:10px}
+.chip{border:2px solid var(--line);border-radius:12px;padding:12px;background:#fff;cursor:pointer;font-size:clamp(15px,1.8vw,19px);color:var(--ink);text-align:left;font-family:inherit}
+.chip.pick{border-color:var(--pri);background:#e9f0ff}
+.chip.done{border-color:var(--ok);background:#e3f7ec;cursor:default}
+.chip.wrong{animation:sh .35s;border-color:var(--bad)}
+@keyframes sh{0%,100%{transform:none}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+.cats{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-top:12px}
+.cat{border:2px dashed #a9b4dc;border-radius:14px;padding:10px;min-height:120px;background:#f7f9ff;cursor:pointer}
+.cat h4{margin:0 0 8px;font-size:17px}
+.cat .chip{margin:4px 0;width:100%}
+.pool{display:flex;flex-wrap:wrap;gap:10px;margin-top:6px}
+.sortl{display:flex;flex-direction:column;gap:8px}
+.sortl .it{display:flex;align-items:center;gap:8px;border:2px solid var(--line);border-radius:12px;padding:8px 10px;background:#fff;font-size:clamp(16px,1.9vw,20px)}
+.sortl .it span{flex:1}
+.sortl .it.ok{border-color:var(--ok);background:#e3f7ec}
+.sortl .it.bad{border-color:var(--bad);background:#fde8e8}
+.score{font-size:64px;font-weight:800;color:var(--pri);text-align:center}
+table{border-collapse:collapse;width:100%;font-size:14px}
+th,td{border:1px solid var(--line);padding:6px 8px;text-align:left;vertical-align:top}
+th{background:#eef1fb}
+.teams{display:flex;gap:8px;flex-wrap:wrap}
+.team{background:rgba(255,255,255,.14);border-radius:12px;padding:6px 12px;font-weight:700}
+.team.now{background:var(--acc);color:#1b1b1b}
+.draft{font-size:12px;color:#c9d3ff;margin-top:18px;text-align:center}
+.hide{display:none!important}
+.prog{font-size:14px;color:var(--mute)}
+.big-emoji{font-size:54px;text-align:center}
+@media (max-width:600px){.wrap{padding:10px}.card{padding:14px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="big-emoji" style="font-size:40px">🔔</div>
+    <div class="grow">
+      <h1 id="hTitle"></h1>
+      <div class="sub" id="hSub"></div>
+      <div class="identity"><span class="pill">TRƯỜNG THCS CHÁNH HƯNG</span><span class="pill">Tổ Tin học</span><span class="pill">Giáo viên: Ngô Thị Phương Mai</span></div>
+      <div class="tacquyen">© 2026 Ngô Thị Phương Mai · Bản quyền nội dung thuộc tác giả</div>
+    </div>
+    <span class="pill" id="hNet"></span>
+    <button class="btn sm ghost" id="btnLog" title="Lịch sử các lượt chơi trên máy này">📒 Lịch sử</button>
+  </header>
+  <div id="teamBar" class="teams hide" style="margin-top:12px"></div>
+  <main id="app"></main>
+  <div class="draft">TRƯỜNG THCS CHÁNH HƯNG · Tổ Tin học · © 2026 Ngô Thị Phương Mai<br>✅ BẢN NHÁP — giáo viên duyệt trước khi dùng · Chạy được khi không có mạng</div>
+</div>
+<script>
+const BAI = {"id": "ON-TAP-GK1-TIN6", "ten": "Ôn tập giữa kỳ I — Tin học 6", "phamvi": "Bài 1 → Bài 4 · Chủ đề 1 Máy tính và cộng đồng · Chủ đề 2 Mạng máy tính và Internet", "so": {"mc": 10, "tf": 4, "th": 4, "tl": 3}, "giay_mc": 25, "giay_tf": 60, "mc": [{"bai": "Bài 1", "muc": "Biết", "q": "Thông tin là gì?", "opts": ["Những gì đem lại hiểu biết cho con người về thế giới xung quanh và về chính mình", "Các con số, văn bản, hình ảnh, âm thanh", "Vật dùng để chứa dữ liệu", "Những gì chỉ có trong máy tính"]}, {"bai": "Bài 1", "muc": "Biết", "q": "Vật nào sau đây KHÔNG phải là vật mang tin?", "opts": ["Xô, chậu", "Giấy", "Cuộn phim", "Thẻ nhớ"]}, {"bai": "Bài 1", "muc": "Biết", "q": "Phát biểu nào sau đây đúng về dữ liệu?", "opts": ["Dữ liệu được thể hiện dưới dạng con số, văn bản, hình ảnh, âm thanh", "Dữ liệu chỉ người có trình độ cao mới hiểu được", "Dữ liệu là những giá trị số do con người nghĩ ra", "Dữ liệu chỉ có ở trong máy tính"]}, {"bai": "Bài 1", "muc": "Hiểu", "q": "Bản tin ghi «Hôm nay 24°–27°» kèm hình mây mưa. Khoa kết luận «Hôm nay trời có mưa». Phát biểu nào đúng?", "opts": ["Bản tin là dữ liệu, kết luận của Khoa là thông tin", "Bản tin là thông tin, kết luận của Khoa là dữ liệu", "Các con số trong bản tin là thông tin", "Bản tin và kết luận đều là dữ liệu"]}, {"bai": "Bài 1", "muc": "Hiểu", "q": "Minh đến ngã tư, thấy đèn xanh bật nên biết có thể qua đường an toàn. Đèn giao thông ở đây là gì?", "opts": ["Vật mang tin", "Thông tin", "Dữ liệu", "Hoạt động xử lí thông tin"]}, {"bai": "Bài 2", "muc": "Biết", "q": "Các hoạt động xử lí thông tin gồm:", "opts": ["Thu nhận, lưu trữ, xử lí, truyền", "Đầu vào, đầu ra", "Nhìn, nghe, suy đoán, kết luận", "Mở bài, thân bài, kết luận"]}, {"bai": "Bài 2", "muc": "Biết", "q": "Máy tính gồm mấy thành phần để thực hiện các hoạt động xử lí thông tin?", "opts": ["4", "3", "5", "6"]}, {"bai": "Bài 2", "muc": "Biết", "q": "Bộ nhớ của máy tính có chức năng gì?", "opts": ["Lưu trữ thông tin", "Thu nhận thông tin", "Hiển thị thông tin", "Xử lí thông tin"]}, {"bai": "Bài 2", "muc": "Biết", "q": "Thiết bị nào được ví như bộ não của máy tính?", "opts": ["Bộ xử lí (CPU)", "Màn hình", "Chuột", "Bàn phím"]}, {"bai": "Bài 2", "muc": "Hiểu", "q": "Thiết bị nào sau đây KHÔNG phải là thiết bị ra?", "opts": ["Micro", "Máy in", "Màn hình", "Loa"]}, {"bai": "Bài 2", "muc": "Hiểu", "q": "Đặc điểm nào sau đây KHÔNG thuộc về máy tính?", "opts": ["Suy nghĩ sáng tạo", "Tính toán nhanh, chính xác", "Lưu trữ được lượng lớn thông tin", "Hoạt động bền bỉ"]}, {"bai": "Bài 2", "muc": "Hiểu", "q": "Bàn phím, chuột, máy quét, webcam thuộc loại thiết bị nào?", "opts": ["Thiết bị vào", "Thiết bị ra", "Bộ nhớ", "Bộ xử lí"]}, {"bai": "Bài 3", "muc": "Biết", "q": "Đơn vị nhỏ nhất dùng để đo dung lượng thông tin là:", "opts": ["Bit", "Byte", "Kilobyte", "Digit"]}, {"bai": "Bài 3", "muc": "Biết", "q": "Một byte gồm bao nhiêu bit?", "opts": ["8", "9", "32", "36"]}, {"bai": "Bài 3", "muc": "Biết", "q": "Dãy bit là gì?", "opts": ["Dãy những kí hiệu 0 và 1", "Dãy chỉ gồm chữ số 2", "Dãy các chữ số từ 0 đến 9", "Âm thanh phát ra từ máy tính"]}, {"bai": "Bài 3", "muc": "Hiểu", "q": "Máy tính dùng dãy bit để biểu diễn những gì?", "opts": ["Số, văn bản, hình ảnh, âm thanh", "Chỉ biểu diễn số", "Chỉ biểu diễn văn bản", "Chỉ biểu diễn hình ảnh, âm thanh"]}, {"bai": "Bài 3", "muc": "Vận dụng", "q": "1 GB xấp xỉ bao nhiêu byte?", "opts": ["Một tỉ byte", "Một nghìn byte", "Một triệu byte", "Một nghìn tỉ byte"]}, {"bai": "Bài 3", "muc": "Vận dụng", "q": "1 KB bằng bao nhiêu byte?", "opts": ["1 024 byte", "1 000 bit", "8 byte", "2 048 byte"]}, {"bai": "Bài 3", "muc": "Vận dụng", "q": "Thẻ nhớ 4 GB lưu được khoảng bao nhiêu bức ảnh, mỗi ảnh 512 KB?", "opts": ["Khoảng 8 nghìn ảnh", "Khoảng 2 nghìn ảnh", "Khoảng 4 nghìn ảnh", "Khoảng 8 triệu ảnh"], "gt": "4 GB ≈ 4 triệu KB; 4 triệu : 512 ≈ 8 nghìn."}, {"bai": "Bài 3", "muc": "Vận dụng", "q": "Tệp ảnh IMG_0041.jpg ghi dung lượng 846 KB. Dung lượng đó là:", "opts": ["846 kilobyte", "846 byte", "846 kilobit", "846 megabyte"]}, {"bai": "Bài 4", "muc": "Biết", "q": "Một mạng máy tính gồm:", "opts": ["Hai hoặc nhiều máy tính được kết nối với nhau", "Tối thiểu năm máy tính liên kết với nhau", "Một số máy tính bàn", "Tất cả máy tính trong một phòng hoặc một toà nhà"]}, {"bai": "Bài 4", "muc": "Biết", "q": "Mạng máy tính gồm các thành phần nào?", "opts": ["Thiết bị đầu cuối, thiết bị kết nối và phần mềm mạng", "Máy tính và thiết bị kết nối", "Thiết bị đầu cuối và thiết bị kết nối", "Máy tính và phần mềm mạng"]}, {"bai": "Bài 4", "muc": "Biết", "q": "Thiết bị nào KHÔNG phải là thiết bị đầu cuối?", "opts": ["Bộ định tuyến", "Máy tính", "Máy in", "Máy quét"]}, {"bai": "Bài 4", "muc": "Vận dụng", "q": "Phát biểu nào KHÔNG chính xác?", "opts": ["Mạng không dây nhanh và ổn định hơn mạng có dây", "Mạng không dây thuận tiện cho người di chuyển nhiều", "Mạng không dây dễ lắp đặt hơn vì không cần khoan tường, đi dây", "Mạng không dây thường dùng cho các thiết bị di động"]}, {"bai": "Bài 4", "muc": "Vận dụng", "q": "Trường hợp nào dùng mạng không dây tiện hơn mạng có dây?", "opts": ["Hành khách trên xe khách dùng điện thoại truy cập Internet", "Máy tính để bàn đặt cố định cạnh ổ cắm mạng", "Máy chủ cần đường truyền ổn định nhất", "Máy in chỉ nối thẳng với một máy tính"]}, {"bai": "Bài 4", "muc": "Hiểu", "q": "Qua mạng máy tính, người dùng KHÔNG chia sẻ được thiết bị nào?", "opts": ["Bàn phím và chuột", "Máy in", "Máy quét", "Dữ liệu"]}], "tf": [{"bai": "Bài 1", "q": "Về thông tin, dữ liệu và vật mang tin:", "y": [["Con số, văn bản, hình ảnh, âm thanh là dữ liệu.", true], ["Cùng một bản tin thời tiết, người nhận khác nhau có thể nhận được thông tin khác nhau.", true, "Em bé chưa biết đọc không nhận được thông tin từ bản tin."], ["Thông tin là những gì có giá trị, dữ liệu là những thứ vô giá trị.", false], ["Thẻ nhớ, giấy viết, đĩa CD là vật mang tin.", true]]}, {"bai": "Bài 1", "q": "Bảng lượng mưa trung bình các tháng ở Hà Nội, Huế, Đà Nẵng, Vũng Tàu (SGK tr.7):", "y": [["Các con số trong bảng là dữ liệu.", true], ["Câu «Tháng 6, Đà Nẵng ít mưa nhất trong bốn nơi» là dữ liệu.", false, "Đó là thông tin rút ra từ dữ liệu."], ["Tờ giấy in bảng là vật mang tin.", true], ["Muốn biết nơi nào mưa nhiều nhất phải xem và so sánh các con số trong bảng.", true]]}, {"bai": "Bài 2", "q": "Về xử lí thông tin:", "y": [["Quá trình xử lí thông tin gồm 4 hoạt động: thu nhận, lưu trữ, xử lí, truyền.", true], ["Em chép bài trên bảng vào vở là hoạt động lưu trữ thông tin.", true], ["Máy tính có thể thay thế con người ở tất cả các lĩnh vực.", false], ["Nhờ máy tính và mạng, thông tin được truyền đi nhanh gần như tức thời.", true]]}, {"bai": "Bài 2", "q": "Cầu thủ đá phạt đền (SGK tr.8). Xét từng việc:", "y": [["Mắt quan sát thủ môn là thu nhận thông tin.", true], ["Não phân tích để chọn góc sút là xử lí thông tin.", true], ["Não điều khiển chân sút bóng là lưu trữ thông tin.", false, "Đó là truyền thông tin."], ["Não ghi nhớ kết quả các bước trước là lưu trữ thông tin.", true]]}, {"bai": "Bài 3", "q": "Về biểu diễn thông tin bằng 0 và 1:", "y": [["Có thể dùng 0 và 1 để biểu diễn giai điệu một bản nhạc.", true], ["Byte là đơn vị nhỏ nhất để lưu trữ thông tin.", false, "Bit mới là đơn vị nhỏ nhất."], ["Không thể dùng 0 và 1 để biểu diễn ảnh màu.", false], ["Văn bản càng nhiều chữ thì dãy bit biểu diễn càng dài.", true]]}, {"bai": "Bài 3", "q": "Quy đổi đơn vị đo dung lượng:", "y": [["1 MB = 1 024 KB.", true], ["1 GB = 1 024 KB.", false, "1 GB = 1 024 MB."], ["2 KB = 2 048 byte.", true], ["Đĩa CD khoảng 700 MB chứa được nhiều dữ liệu hơn USB 4 GB.", false, "4 GB ≈ 4 000 MB, lớn hơn 700 MB."]]}, {"bai": "Bài 4", "q": "Về mạng máy tính:", "y": [["Chỉ cần hai máy tính nối với nhau là đã có một mạng máy tính.", true], ["Qua mạng, nhiều máy tính có thể dùng chung một máy in.", true], ["Bộ chuyển mạch (Switch) là thiết bị đầu cuối.", false, "Switch là thiết bị kết nối."], ["Mạng máy tính giúp trao đổi thông tin, chia sẻ dữ liệu.", true]]}, {"bai": "Bài 4", "q": "Về mạng có dây và mạng không dây:", "y": [["Đường truyền có loại nhìn thấy (dây dẫn) và loại không nhìn thấy (sóng vô tuyến).", true], ["Kết nối không dây chỉ dùng được với thiết bị di động.", false], ["Kết nối không dây giúp thay đổi vị trí mà vẫn giữ được kết nối.", true], ["Đường truyền không dây ổn định hơn đường truyền có dây.", false]]}], "th": [{"bai": "Bài 1", "t": "match", "q": "Ghép mỗi khái niệm với mô tả đúng của nó.", "p": [["Thông tin", "Đem lại hiểu biết về thế giới xung quanh và về chính mình"], ["Dữ liệu", "Con số, văn bản, hình ảnh, âm thanh"], ["Vật mang tin", "Phương tiện để lưu trữ và truyền thông tin"]]}, {"bai": "Bài 1", "t": "match", "q": "Truyện thám tử Sherlock Holmes: ghép mỗi thứ với tên gọi đúng.", "p": [["Dấu vết tại hiện trường", "Dữ liệu"], ["Cuốn sổ ghi chép của Holmes", "Vật mang tin"], ["Kết luận của Holmes", "Thông tin"]]}, {"bai": "Bài 2", "t": "cat", "q": "Mỗi việc làm sau thuộc hoạt động xử lí thông tin nào?", "cats": ["Thu nhận", "Lưu trữ", "Xử lí", "Truyền"], "items": [["Quan sát đường đi của tàu biển", 0], ["Ghi chép sự kiện trong chuyến tham quan", 1], ["Chuyển một đoạn văn xuôi thành văn vần", 2], ["Thuyết trình chủ đề tình bạn", 3], ["Thực hiện một phép tính nhẩm", 2]]}, {"bai": "Bài 2", "t": "cat", "q": "Xếp mỗi thiết bị vào đúng thành phần của máy tính.", "cats": ["Thiết bị vào", "Thiết bị ra", "Bộ nhớ", "Bộ xử lí"], "items": [["Bàn phím", 0], ["Chuột", 0], ["Máy quét", 0], ["Màn hình", 1], ["Máy in", 1], ["Loa", 1], ["Thẻ nhớ", 2], ["Đĩa quang", 2], ["CPU", 3]]}, {"bai": "Bài 2", "t": "sort", "q": "An đọc truyện rồi kể cho Minh nghe. Sắp xếp các việc theo đúng thứ tự.", "items": ["An đọc truyện", "An nhớ nội dung câu chuyện", "An tóm tắt câu chuyện", "An kể lại cho Minh nghe"]}, {"bai": "Bài 2", "t": "match", "q": "Ghép mỗi thành phần của máy tính với nhiệm vụ của nó.", "p": [["Thiết bị vào", "Thu nhận thông tin vào máy"], ["Bộ nhớ", "Lưu trữ thông tin"], ["Bộ xử lí", "Tính toán, xử lí dữ liệu"], ["Thiết bị ra", "Giúp người dùng nhận thông tin từ máy"]]}, {"bai": "Bài 3", "t": "sort", "q": "Sắp xếp các đơn vị đo dung lượng từ nhỏ đến lớn.", "items": ["bit", "byte", "KB", "MB", "GB", "TB"]}, {"bai": "Bài 3", "t": "sort", "q": "Sắp xếp các thiết bị nhớ theo dung lượng từ nhỏ đến lớn.", "items": ["Đĩa CD 700 MB", "USB 4 GB", "Thẻ nhớ 32 GB", "Ổ cứng 1 TB", "Ổ cứng di động 2 TB"]}, {"bai": "Bài 3", "t": "match", "q": "Mã hoá các số từ 0 đến 7 bằng dãy 3 bit (cách chia đôi dãy số ở SGK). Ghép số với mã.", "p": [["Số 1", "001"], ["Số 3", "011"], ["Số 4", "100"], ["Số 6", "110"], ["Số 7", "111"]]}, {"bai": "Bài 4", "t": "cat", "q": "Phân loại thiết bị trong mạng máy tính.", "cats": ["Thiết bị đầu cuối", "Thiết bị kết nối"], "items": [["Máy tính để bàn", 0], ["Máy tính xách tay", 0], ["Máy in", 0], ["Máy quét", 0], ["Điện thoại thông minh", 0], ["Bộ chuyển mạch (Switch)", 1], ["Bộ chia (Hub)", 1], ["Bộ định tuyến (Router)", 1], ["Bộ định tuyến không dây", 1]]}, {"bai": "Bài 4", "t": "cat", "q": "Đặc điểm nào của mạng có dây, đặc điểm nào của mạng không dây?", "cats": ["Mạng có dây", "Mạng không dây"], "items": [["Truyền qua dây dẫn mạng", 0], ["Truyền qua sóng điện từ", 1], ["Lắp đặt khó: đi dây, khoan tường", 0], ["Lắp đặt dễ hơn", 1], ["Độ ổn định cao", 0], ["Độ ổn định thấp hơn", 1]]}], "tl": [{"bai": "Bài 1", "muc": "Biết", "t": "dien", "q": "Câu «Hãy gọi cho tôi lúc 16 giờ theo số điện thoại 0123456789». Điền thông tin hay dữ liệu:", "o": [{"n": "«16:00» và «0123456789» là:", "a": ["dữ liệu", "du lieu"]}, {"n": "Cả câu nhắn trên là:", "a": ["thông tin", "thong tin"]}]}, {"bai": "Bài 2", "muc": "Biết", "t": "dien", "q": "Điền tên 2 hoạt động còn thiếu: thu nhận → …(1)… → xử lí → …(2)… thông tin.", "o": [{"n": "(1)", "a": ["lưu trữ", "luu tru"]}, {"n": "(2)", "a": ["truyền", "truyen"]}]}, {"bai": "Bài 2", "muc": "Hiểu", "t": "mo", "q": "Vì sao nói máy tính là công cụ hiệu quả để xử lí thông tin? Nêu ít nhất 3 lí do.", "y": ["Thu nhận thông tin nhanh, đa dạng", "Tính toán nhanh, chính xác (hàng trăm tỉ phép tính mỗi giây)", "Làm việc bền bỉ, không mệt mỏi", "Lưu trữ được lượng thông tin rất lớn", "Kết nối mạng để trao đổi thông tin nhanh"]}, {"bai": "Bài 3", "muc": "Vận dụng", "t": "dien", "q": "Quy đổi đơn vị:", "o": [{"n": "1 byte = … bit", "a": ["8"]}, {"n": "1 MB = … KB", "a": ["1024", "1.024", "1 024"]}, {"n": "1 GB = … MB", "a": ["1024", "1.024", "1 024"]}]}, {"bai": "Bài 3", "muc": "Vận dụng", "t": "dien", "q": "Theo cách mã hoá dãy số 0–7 ở SGK, viết dãy bit của:", "o": [{"n": "Số 3", "a": ["011"]}, {"n": "Số 6", "a": ["110"]}]}, {"bai": "Bài 3", "muc": "Vận dụng", "t": "dien", "q": "Điện thoại còn trống khoảng 4 GB, mỗi ảnh chụp khoảng 2 MB. Điện thoại chứa thêm được khoảng bao nhiêu ảnh? (gõ số)", "o": [{"n": "Số ảnh khoảng:", "a": ["2000", "2.000", "2 000", "2048", "2.048"]}], "gt": "4 GB ≈ 4 000 MB (chính xác 4 096 MB); 4 000 : 2 = 2 000 ảnh."}, {"bai": "Bài 4", "muc": "Vận dụng", "t": "dien", "q": "Kể tên 2 cách kết nối không dây em đã học.", "o": [{"n": "Cách 1", "a": ["wifi", "wi-fi", "bluetooth"]}, {"n": "Cách 2", "a": ["bluetooth", "wifi", "wi-fi"]}]}], "khoi": "6", "mon": "tin6", "gui_url": "https://script.google.com/macros/s/AKfycbwp5pbI0W4vDrLZbUaOSuNpdTeh5cuZptVkSuIq_VWhjhswSVryoQajxYGjhHOZ2tqQ/exec"};
+const VONG = [
+  {k:"mc", ten:"Vòng 1 · Rung chuông vàng", mo:"Trắc nghiệm nhiều lựa chọn, có tính giờ", icon:"🔔"},
+  {k:"tf", ten:"Vòng 2 · Đúng hay Sai", mo:"Mỗi câu 4 ý a, b, c, d như đề kiểm tra", icon:"✅"},
+  {k:"th", ten:"Vòng 3 · Thực hành", mo:"Ghép đôi, phân loại, sắp xếp thứ tự", icon:"🧩"},
+  {k:"tl", ten:"Vòng 4 · Tự luận ngắn", mo:"Điền kết quả, viết câu trả lời", icon:"✍️"}
+];
+const LOGKEY = "ontap_log_" + BAI.id, QKEY = "ontap_queue_" + BAI.id;
+const $ = s => document.querySelector(s), app = $("#app");
+const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const shuf = a => { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+const norm = s => String(s).toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/đ/g, "d").replace(/[\s.,;:!?'"()]/g, "");
+const lsGet = (k, d) => { try { return JSON.parse(localStorage.getItem(k)) ?? d; } catch (e) { return d; } };
+const lsSet = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} };
+
+$("#hTitle").textContent = BAI.ten;
+$("#hSub").textContent = BAI.phamvi;
+function net() { $("#hNet").textContent = navigator.onLine ? "🟢 Có mạng" : "📴 Không mạng — vẫn chơi được"; }
+addEventListener("online", () => { net(); flush(); }); addEventListener("offline", net); net();
+
+/* ---------- trạng thái ---------- */
+let S = null; // lượt chơi hiện tại
+const qs = new URLSearchParams(location.search);
+
+/* chọn câu: chia đều theo bài để lượt nào cũng phủ đủ nội dung */
+function pick(list, n) {
+  if (!n || n >= list.length) return shuf(list);
+  const by = {}; list.forEach(x => (by[x.bai || "_"] = by[x.bai || "_"] || []).push(x));
+  const keys = Object.keys(by).map(k => (by[k] = shuf(by[k]), k));
+  const out = []; let i = 0;
+  while (out.length < n) { const k = keys[i % keys.length]; if (by[k].length) out.push(by[k].shift()); i++; if (i > n * 20) break; }
+  return shuf(out);
+}
+
+/* ---------- màn mở đầu ---------- */
+function home() {
+  stopTimer();
+  $("#teamBar").classList.add("hide");
+  const tong = BAI.mc.length + BAI.tf.length + BAI.th.length + BAI.tl.length;
+  app.innerHTML = `
+  <div class="card">
+    <div class="row"><span class="tag">Ngân hàng: ${BAI.mc.length} câu trắc nghiệm · ${BAI.tf.length} câu đúng/sai (${BAI.tf.length * 4} ý) · ${BAI.th.length} bài thực hành · ${BAI.tl.length} câu tự luận</span></div>
+    <h2 style="margin:10px 0 6px">Chọn cách chơi</h2>
+    <div class="grid2" id="vongs">${VONG.map((v, i) => `<div class="vong on" data-i="${i}"><b>${v.icon} ${v.ten}</b>${v.mo}</div>`).join("")}</div>
+    <div class="row" style="margin-top:14px">
+      <label><input type="radio" name="sl" value="luot" checked> Một lượt (mỗi vòng ${BAI.so.mc}/${BAI.so.tf}/${BAI.so.th}/${BAI.so.tl} câu, xáo mới mỗi lần)</label>
+      <label><input type="radio" name="sl" value="het"> Ôn hết ngân hàng (${tong} câu)</label>
+    </div>
+    <div class="grid2" style="margin-top:14px">
+      <div><label>Mã học sinh <span style="font-weight:400;color:var(--mute)">(bắt buộc khi chơi một mình · không ghi tên)</span></label><input type="text" id="ma" placeholder="VD ${(BAI.khoi || "6")[0]}A1-01" autocomplete="off" value="${esc(window.ARENA_SID || qs.get("ma") || qs.get("sid") || "")}"><div class="fb bad hide" id="maLoi" style="margin-top:6px;padding:8px 10px;font-size:15px"></div></div>
+      <div><label>Thi đội trên ti vi <span style="font-weight:400;color:var(--mute)">(tùy chọn · 2–6 đội, cách nhau dấu phẩy · khi thi đội không cần mã)</span></label><input type="text" id="doi" placeholder="VD: Đội 1, Đội 2, Đội 3, Đội 4"></div>
+    </div>
+    <div class="row" style="margin-top:16px"><button class="btn acc" id="go">▶ Bắt đầu</button><span class="prog">Mỗi vòng xong có giải thích và nguồn trong sách.</span></div>
+  </div>`;
+  app.querySelectorAll(".vong").forEach(el => el.onclick = () => el.classList.toggle("on"));
+  $("#ma").oninput = () => { $("#maLoi").classList.add("hide"); $("#ma").style.borderColor = ""; };
+  $("#go").onclick = () => {
+    const on = [...app.querySelectorAll(".vong.on")].map(el => VONG[+el.dataset.i].k);
+    if (!on.length) { alert("Chọn ít nhất một vòng."); return; }
+    const het = app.querySelector('input[name=sl]:checked').value === "het";
+    const doi = $("#doi").value.split(",").map(s => s.trim()).filter(Boolean).slice(0, 6);
+    const ma = $("#ma").value.trim().toUpperCase().replace(/\s+/g, "");
+    if (doi.length === 1) { alert("Thi đội cần ít nhất 2 đội, cách nhau dấu phẩy (VD: Đội 1, Đội 2)."); $("#doi").focus(); return; }
+    if (doi.length < 2) {                       // chơi một mình: bắt buộc mã học sinh
+      const k = BAI.khoi || "67";
+      const re = k === "6" ? /^6A(\d{1,2}|P)-\d{2}$/ : k === "7" ? /^7A(\d{1,2}|P)-\d{2}$/ : /^[67]A(\d{1,2}|P)-\d{2}$/;
+      if (!ma) { baoMa("Em nhập mã học sinh trước khi bắt đầu (VD " + k[0] + "A1-01)."); return; }
+      if (!re.test(ma) && /^[67]A(\d{1,2}|P)-\d{2}$/.test(ma)) { baoMa("Đây là bài ôn tập khối " + k[0] + " — mã học sinh phải bắt đầu bằng " + k[0] + "A (em nhập mã khối " + ma[0] + ")."); return; }
+      if (!re.test(ma)) { baoMa("Mã «" + ma + "» chưa đúng dạng. Mã gồm lớp, gạch ngang, số thứ tự 2 chữ số — VD " + k[0] + "A1-01, " + k[0] + "A10-05" + (k.includes("7") ? ", 7AP-03" : "") + "."); return; }
+    }
+    start(on, het, doi.length >= 2 ? "" : ma, doi);
+  };
+}
+
+function baoMa(t) { const e = $("#maLoi"); e.textContent = t; e.classList.remove("hide"); $("#ma").style.borderColor = "var(--bad)"; $("#ma").focus(); }
+function start(vongs, het, ma, doi) {
+  const list = {};
+  vongs.forEach(k => list[k] = het ? shuf(BAI[k]) : pick(BAI[k], BAI.so[k]));
+  S = { vongs, list, vi: 0, qi: 0, ma, doi: doi.length >= 2 ? doi.map(t => ({ ten: t, d: 0 })) : null, turn: 0,
+        diem: {}, toi: {}, sai: [], bat: Date.now(), het };
+  vongs.forEach(k => { S.diem[k] = 0; S.toi[k] = 0; });
+  intro();
+}
+
+function teamBar() {
+  const b = $("#teamBar");
+  if (!S.doi) { b.classList.add("hide"); return; }
+  b.classList.remove("hide");
+  b.innerHTML = S.doi.map((t, i) => `<span class="team ${i === S.turn ? "now" : ""}">${esc(t.ten)}: ${Math.round(t.d * 100) / 100}</span>`).join("");
+}
+function cong(k, dat, toi) { S.diem[k] += dat; S.toi[k] += toi; if (S.doi) S.doi[S.turn].d += dat; }
+function nextTurn() { if (S.doi) S.turn = (S.turn + 1) % S.doi.length; }
+
+function intro() {
+  stopTimer();
+  const k = S.vongs[S.vi], v = VONG.find(x => x.k === k);
+  teamBar();
+  app.innerHTML = `<div class="card" style="text-align:center"><div class="big-emoji">${v.icon}</div><h2>${v.ten}</h2><p style="font-size:18px">${v.mo} — ${S.list[k].length} câu</p><button class="btn acc" id="go">Vào vòng</button></div>`;
+  $("#go").onclick = () => { S.qi = 0; show(); };
+}
+
+function show() {
+  const k = S.vongs[S.vi], it = S.list[k][S.qi];
+  if (!it) { S.vi++; if (S.vi < S.vongs.length) intro(); else finish(); return; }
+  teamBar();
+  ({ mc: showMC, tf: showTF, th: showTH, tl: showTL })[k](it);
+}
+function head(k, it) {
+  const n = S.list[k].length, who = S.doi ? ` · Lượt: <b>${esc(S.doi[S.turn].ten)}</b>` : "";
+  return `<div class="row"><span class="prog">${VONG.find(x => x.k === k).ten} · Câu ${S.qi + 1}/${n}${who}</span><span class="grow"></span>${BAI.an_nhan ? "" : (it.bai ? `<span class="tag">${esc(it.bai)}</span>` : "") + (it.muc ? `<span class="tag">${esc(it.muc)}</span>` : "")}</div>`;
+}
+function nextBtn() { return `<div class="row" style="margin-top:14px"><button class="btn" id="nx">Câu tiếp ➜</button></div>`; }
+function bindNext() { const b = $("#nx"); b.onclick = () => { nextTurn(); S.qi++; show(); }; b.focus(); }
+
+/* ---------- đồng hồ ---------- */
+let T = null;
+function startTimer(sec, onEnd) {
+  stopTimer(); const bar = $("#tbar"), t0 = Date.now();
+  T = setInterval(() => { const r = 1 - (Date.now() - t0) / (sec * 1000); if (bar) bar.style.width = Math.max(0, r * 100) + "%"; const tx = $("#tsec"); if (tx) tx.textContent = Math.max(0, Math.ceil(r * sec)) + " giây"; if (r <= 0) { stopTimer(); onEnd(); } }, 200);
+}
+function stopTimer() { if (T) clearInterval(T); T = null; }
+
+/* ---------- vòng 1: trắc nghiệm ---------- */
+function showMC(it) {
+  const opts = shuf(it.opts.map((t, i) => ({ t, ok: i === 0 })));
+  app.innerHTML = `<div class="card">${head("mc", it)}<div class="q">${esc(it.q)}</div>
+    <div class="timer"><i id="tbar"></i></div><div class="prog" id="tsec"></div>
+    <div class="opts">${opts.map((o, i) => `<button class="opt" data-i="${i}"><span class="k">${"ABCD"[i]}</span>${esc(o.t)}</button>`).join("")}</div><div id="fb"></div></div>`;
+  let done = false;
+  const end = (i) => {
+    if (done) return; done = true; stopTimer();
+    const btns = app.querySelectorAll(".opt");
+    btns.forEach((b, j) => { b.disabled = true; if (opts[j].ok) b.classList.add("ok"); });
+    const ok = i != null && opts[i].ok;
+    if (i != null && !ok) btns[i].classList.add("bad");
+    cong("mc", ok ? 1 : 0, 1);
+    if (!ok) S.sai.push("TN: " + it.q.slice(0, 60));
+    $("#fb").outerHTML = `<div class="fb ${ok ? "ok" : "bad"}">${ok ? "🎉 Chính xác!" : (i == null ? "⏰ Hết giờ! " : "Chưa đúng. ") + "Đáp án: <b>" + esc(it.opts[0]) + "</b>"}${it.gt ? `<div>${esc(it.gt)}</div>` : ""}${it.src ? `<div class="src">📖 ${esc(it.src)}</div>` : ""}</div>` + nextBtn();
+    bindNext();
+  };
+  app.querySelectorAll(".opt").forEach(b => b.onclick = () => end(+b.dataset.i));
+  startTimer(it.giay || BAI.giay_mc || 25, () => end(null));
+}
+
+/* ---------- vòng 2: đúng / sai ---------- */
+function showTF(it) {
+  const ys = it.y.map((y, i) => ({ t: y[0], d: y[1], g: y[2] || "", n: "abcd"[i] }));
+  const ans = {};
+  app.innerHTML = `<div class="card">${head("tf", it)}<div class="q">${esc(it.q)}</div>
+    <div class="timer"><i id="tbar"></i></div><div class="prog" id="tsec"></div>
+    <div id="tfl">${ys.map((y, i) => `<div class="tf" data-i="${i}"><div><b>${y.n})</b> ${esc(y.t)}<div class="src gx hide"></div></div><div class="bt"><button class="btn ghost sm" data-v="1">Đúng</button><button class="btn ghost sm" data-v="0">Sai</button></div></div>`).join("")}</div>
+    <div class="row" style="margin-top:12px"><button class="btn ok" id="chk">Chốt đáp án</button></div><div id="fb"></div></div>`;
+  app.querySelectorAll(".tf").forEach(r => r.querySelectorAll("button").forEach(b => b.onclick = () => {
+    ans[r.dataset.i] = b.dataset.v === "1"; r.querySelectorAll("button").forEach(x => x.classList.remove("sel")); b.classList.add("sel");
+  }));
+  let done = false;
+  const end = () => {
+    if (done) return; done = true; stopTimer();
+    let dung = 0;
+    app.querySelectorAll(".tf").forEach(r => {
+      const y = ys[r.dataset.i], a = ans[r.dataset.i], ok = a === y.d; if (ok) dung++;
+      r.style.background = ok ? "#e3f7ec" : "#fde8e8";
+      r.querySelectorAll("button").forEach(b => { b.disabled = true; if ((b.dataset.v === "1") === y.d) b.classList.add("ok"); });
+      const g = r.querySelector(".gx"); g.classList.remove("hide"); g.textContent = (y.d ? "Đúng" : "Sai") + (y.g ? " — " + y.g : "");
+      if (!ok) S.sai.push("ĐS: " + y.t.slice(0, 60));
+    });
+    cong("tf", dung / 4, 1);
+    $("#chk").remove();
+    $("#fb").outerHTML = `<div class="fb ${dung === 4 ? "ok" : "bad"}">Đúng ${dung}/4 ý.${it.src ? `<div class="src">📖 ${esc(it.src)}</div>` : ""}</div>` + nextBtn();
+    bindNext();
+  };
+  $("#chk").onclick = end;
+  startTimer(it.giay || BAI.giay_tf || 60, end);
+}
+
+/* ---------- vòng 3: thực hành ---------- */
+function showTH(it) {
+  const box = `<div class="card">${head("th", it)}<div class="q">${esc(it.q)}</div><div id="th"></div><div id="fb"></div></div>`;
+  app.innerHTML = box;
+  ({ match: thMatch, cat: thCat, sort: thSort })[it.t](it, $("#th"));
+}
+function thDone(it, dat, toi, msg) {
+  cong("th", dat / toi, 1);
+  $("#fb").outerHTML = `<div class="fb ${dat === toi ? "ok" : "bad"}">${msg}${it.gt ? `<div>${esc(it.gt)}</div>` : ""}${it.src ? `<div class="src">📖 ${esc(it.src)}</div>` : ""}</div>` + nextBtn();
+  bindNext();
+}
+function thMatch(it, el) {
+  const L = shuf(it.p.map((p, i) => ({ t: p[0], i }))), R = shuf(it.p.map((p, i) => ({ t: p[1], i })));
+  el.innerHTML = `<p class="prog">Bấm một thẻ bên trái rồi bấm thẻ khớp bên phải.</p><div class="grid2"><div class="m-col" id="ml">${L.map(x => `<button class="chip" data-i="${x.i}">${esc(x.t)}</button>`).join("")}</div><div class="m-col" id="mr">${R.map(x => `<button class="chip" data-i="${x.i}">${esc(x.t)}</button>`).join("")}</div></div>`;
+  let pick = null, sai = new Set(), xong = 0;
+  el.querySelectorAll("#ml .chip").forEach(b => b.onclick = () => { if (b.classList.contains("done")) return; el.querySelectorAll("#ml .chip").forEach(x => x.classList.remove("pick")); b.classList.add("pick"); pick = b; });
+  el.querySelectorAll("#mr .chip").forEach(b => b.onclick = () => {
+    if (!pick || b.classList.contains("done")) return;
+    if (pick.dataset.i === b.dataset.i) { pick.classList.remove("pick"); pick.classList.add("done"); b.classList.add("done"); pick = null; xong++;
+      if (xong === it.p.length) { const d = it.p.length - sai.size; thDone(it, d, it.p.length, `Hoàn thành! Ghép đúng ngay lần đầu ${d}/${it.p.length} cặp.`); } }
+    else { sai.add(pick.dataset.i); S.sai.push("Ghép: " + it.p[pick.dataset.i][0].slice(0, 40)); [pick, b].forEach(x => { x.classList.remove("wrong"); void x.offsetWidth; x.classList.add("wrong"); }); }
+  });
+}
+function thCat(it, el) {
+  const items = shuf(it.items.map((x, i) => ({ t: x[0], c: x[1], i })));
+  const where = {};
+  el.innerHTML = `<p class="prog">Bấm một thẻ rồi bấm vào ô đúng của nó. Xếp xong bấm «Kiểm tra».</p><div class="pool" id="pool"></div>
+    <div class="cats">${it.cats.map((c, j) => `<div class="cat" data-c="${j}"><h4>${esc(c)}</h4><div class="in"></div></div>`).join("")}</div>
+    <div class="row" style="margin-top:12px"><button class="btn ok" id="chk">Kiểm tra</button></div>`;
+  let pick = null;
+  const draw = () => {
+    $("#pool").innerHTML = items.filter(x => where[x.i] == null).map(x => `<button class="chip ${pick === x.i ? "pick" : ""}" data-i="${x.i}">${esc(x.t)}</button>`).join("") || `<span class="prog">Đã xếp hết thẻ.</span>`;
+    el.querySelectorAll(".cat").forEach(c => c.querySelector(".in").innerHTML = items.filter(x => where[x.i] === +c.dataset.c).map(x => `<button class="chip ${pick === x.i ? "pick" : ""}" data-i="${x.i}">${esc(x.t)}</button>`).join(""));
+    el.querySelectorAll(".chip").forEach(b => b.onclick = e => { e.stopPropagation(); if (lock) return; pick = +b.dataset.i; draw(); });
+  };
+  let lock = false;
+  el.querySelectorAll(".cat").forEach(c => c.onclick = () => { if (lock || pick == null) return; where[pick] = +c.dataset.c; pick = null; draw(); });
+  draw();
+  $("#chk").onclick = () => {
+    if (items.some(x => where[x.i] == null)) { alert("Còn thẻ chưa xếp."); return; }
+    lock = true; let d = 0;
+    el.querySelectorAll(".cat .chip").forEach(b => { const x = items.find(y => y.i === +b.dataset.i); const ok = x.c === where[x.i]; if (ok) d++; else { S.sai.push("Phân loại: " + x.t.slice(0, 40)); b.textContent += " → " + it.cats[x.c]; } b.classList.add(ok ? "done" : "wrong"); b.style.background = ok ? "" : "#fde8e8"; });
+    $("#chk").remove();
+    thDone(it, d, items.length, `Xếp đúng ${d}/${items.length} thẻ.`);
+  };
+}
+function thSort(it, el) {
+  let ord = shuf(it.items.map((t, i) => ({ t, i })));
+  if (ord.every((x, k) => x.i === k)) ord.reverse();
+  const draw = (lock) => {
+    el.innerHTML = `<p class="prog">Dùng nút ▲ ▼ để đưa về đúng thứ tự. Xong bấm «Kiểm tra».</p><div class="sortl">${ord.map((x, k) => `<div class="it" data-k="${k}"><b>${k + 1}.</b><span>${esc(x.t)}</span>${lock ? "" : `<button class="btn ghost sm" data-u="${k}">▲</button><button class="btn ghost sm" data-d="${k}">▼</button>`}</div>`).join("")}</div>${lock ? "" : `<div class="row" style="margin-top:12px"><button class="btn ok" id="chk">Kiểm tra</button></div>`}`;
+    if (lock) return;
+    el.querySelectorAll("[data-u]").forEach(b => b.onclick = () => { const k = +b.dataset.u; if (k > 0) { [ord[k - 1], ord[k]] = [ord[k], ord[k - 1]]; draw(); } });
+    el.querySelectorAll("[data-d]").forEach(b => b.onclick = () => { const k = +b.dataset.d; if (k < ord.length - 1) { [ord[k + 1], ord[k]] = [ord[k], ord[k + 1]]; draw(); } });
+    $("#chk").onclick = () => {
+      draw(true); let d = 0;
+      el.querySelectorAll(".it").forEach((r, k) => { const ok = ord[k].i === k; if (ok) d++; r.classList.add(ok ? "ok" : "bad"); });
+      if (d < ord.length) S.sai.push("Sắp xếp: " + it.q.slice(0, 50));
+      thDone(it, d, ord.length, `Đúng vị trí ${d}/${ord.length}. Thứ tự đúng: ${it.items.map(esc).join(" → ")}`);
+    };
+  };
+  draw(false);
+}
+
+/* ---------- vòng 4: tự luận ---------- */
+function showTL(it) {
+  if (it.t === "mo") return showOpen(it);
+  app.innerHTML = `<div class="card">${head("tl", it)}<div class="q">${esc(it.q)}</div>
+    <div class="grid2">${it.o.map((o, i) => `<div><label>${esc(o.n)}</label><input type="text" data-i="${i}" autocomplete="off"></div>`).join("")}</div>
+    <div class="row" style="margin-top:12px"><button class="btn ok" id="chk">Nộp câu trả lời</button></div><div id="fb"></div></div>`;
+  const ins = app.querySelectorAll("input"); ins[0].focus();
+  ins.forEach(x => x.onkeydown = e => { if (e.key === "Enter") $("#chk").click(); });
+  $("#chk").onclick = () => {
+    let d = 0;
+    ins.forEach(x => { const o = it.o[+x.dataset.i], v = norm(x.value); const ok = o.a.some(a => norm(a) === v); if (ok) d++; else S.sai.push("TL: " + o.n.slice(0, 40)); x.style.borderColor = ok ? "var(--ok)" : "var(--bad)"; x.disabled = true; if (!ok) x.value += "   ✗ đáp án: " + o.a[0]; });
+    cong("tl", d / it.o.length, 1);
+    $("#chk").remove();
+    $("#fb").outerHTML = `<div class="fb ${d === it.o.length ? "ok" : "bad"}">Đúng ${d}/${it.o.length} ô.${it.gt ? `<div>${esc(it.gt)}</div>` : ""}${it.src ? `<div class="src">📖 ${esc(it.src)}</div>` : ""}</div>` + nextBtn();
+    bindNext();
+  };
+}
+function showOpen(it) {
+  app.innerHTML = `<div class="card">${head("tl", it)}<div class="q">${esc(it.q)}</div>
+    <textarea id="tv" placeholder="Viết câu trả lời của em ở đây…"></textarea><div class="prog" id="dem"></div>
+    <div class="row" style="margin-top:12px"><button class="btn ok" id="chk">Xem gợi ý và tự chấm</button></div><div id="fb"></div></div>`;
+  const tv = $("#tv"), cau = () => tv.value.split(/[.!?…]+/).map(s => s.trim()).filter(s => s.split(/\s+/).length >= 3).length;
+  tv.oninput = () => $("#dem").textContent = `Em đã viết khoảng ${cau()} câu.` + (it.cau ? ` Yêu cầu: ${it.cau[0]}–${it.cau[1]} câu.` : "");
+  tv.focus();
+  $("#chk").onclick = () => {
+    tv.disabled = true; $("#chk").remove();
+    const c = cau(), dCau = it.cau ? (c >= it.cau[0] && c <= it.cau[1]) : null;
+    $("#fb").outerHTML = `<div class="fb ok"><b>Gợi ý — em đánh dấu những ý mình đã viết được:</b>
+      ${it.y.map((y, i) => `<div><label style="font-weight:400"><input type="checkbox" data-i="${i}"> ${esc(y)}</label></div>`).join("")}
+      ${dCau != null ? `<div style="margin-top:6px">${dCau ? "✔" : "✗"} Độ dài: ${c} câu (yêu cầu ${it.cau[0]}–${it.cau[1]} câu)</div>` : ""}
+      ${it.mau ? `<details style="margin-top:8px"><summary>Xem đoạn văn mẫu</summary><p>${esc(it.mau)}</p></details>` : ""}
+      ${it.src ? `<div class="src">📖 ${esc(it.src)}</div>` : ""}</div>
+      <div class="row" style="margin-top:14px"><button class="btn" id="nx">Chấm xong ➜</button></div>`;
+    $("#nx").onclick = () => {
+      const k = app.querySelectorAll('input[type=checkbox]:checked').length, tot = it.y.length + (dCau != null ? 1 : 0);
+      const d = (k + (dCau ? 1 : 0)) / tot; cong("tl", d, 1);
+      if (d < 1) S.sai.push("Tự luận: " + it.q.slice(0, 40));
+      S.tl_bai = S.tl_bai || []; S.tl_bai.push(tv.value.slice(0, 500));
+      nextTurn(); S.qi++; show();
+    };
+  };
+}
+
+/* ---------- tổng kết + ghi vết ---------- */
+function finish() {
+  stopTimer();
+  let dat = 0, toi = 0; S.vongs.forEach(k => { dat += S.diem[k]; toi += S.toi[k]; });
+  const thang10 = toi ? Math.round(dat / toi * 100) / 10 : 0;
+  const rec = { rid: BAI.id + "-" + Date.now().toString(36) + "-" + Math.random().toString(36).slice(2, 7), bai: BAI.id, ten: BAI.ten, ma: S.ma || (S.doi ? "THI-DOI" : ""), luc: new Date().toISOString(), giay: Math.round((Date.now() - S.bat) / 1000),
+    diem10: thang10, vong: Object.fromEntries(S.vongs.map(k => [k, `${Math.round(S.diem[k] * 100) / 100}/${S.toi[k]}`])),
+    doi: S.doi ? S.doi.map(t => t.ten + ": " + Math.round(t.d * 100) / 100) : null, sai: S.sai.slice(0, 40), het: S.het };
+  const log = lsGet(LOGKEY, []); log.push(rec); lsSet(LOGKEY, log.slice(-500));
+  teamBar();
+  const msg = thang10 >= 8 ? "Xuất sắc! 🏆" : thang10 >= 6.5 ? "Tốt lắm! 👍" : thang10 >= 5 ? "Đạt — ôn thêm chỗ sai nhé 💪" : "Cần ôn lại — chơi thêm lượt nữa nhé 📚";
+  const xh = S.doi ? S.doi.slice().sort((a, b) => b.d - a.d) : null;
+  app.innerHTML = `<div class="card"><h2 style="text-align:center;margin:0">Tổng kết</h2>
+    ${xh ? `<div class="big-emoji">🏆</div><h2 style="text-align:center">${esc(xh[0].ten)} dẫn đầu</h2><table><tr><th>Hạng</th><th>Đội</th><th>Điểm</th></tr>${xh.map((t, i) => `<tr><td>${i + 1}</td><td>${esc(t.ten)}</td><td>${Math.round(t.d * 100) / 100}</td></tr>`).join("")}</table>` :
+      `<div class="score">${thang10.toString().replace(".", ",")}</div><p style="text-align:center;font-size:20px">${msg}</p>`}
+    <table style="margin-top:12px"><tr><th>Vòng</th><th>Kết quả</th></tr>${S.vongs.map(k => `<tr><td>${VONG.find(v => v.k === k).ten}</td><td>${Math.round(S.diem[k] * 100) / 100} / ${S.toi[k]}</td></tr>`).join("")}</table>
+    ${S.sai.length ? `<details style="margin-top:12px"><summary>Các ý cần ôn lại (${S.sai.length})</summary><ul>${S.sai.map(s => `<li>${esc(s)}</li>`).join("")}</ul></details>` : ""}
+    <p class="prog" id="gui">${S.ma ? "Đang lưu và gửi kết quả…" : "Kết quả đã lưu trên máy này (📒 Lịch sử)."}</p>
+    <div class="row"><button class="btn acc" id="again">🔁 Chơi lượt mới</button><button class="btn ghost" id="hm">Về đầu</button></div></div>`;
+  $("#again").onclick = () => start(S.vongs, S.het, S.ma, S.doi ? S.doi.map(t => t.ten) : []);
+  $("#hm").onclick = home;
+  send(rec);
+}
+
+/* Gửi kết quả — giống các bài tập của Đấu trường:
+   lưu ngay trên máy (hàng chờ), có mạng thì tự gửi; mất mạng giữa chừng không mất bài.
+   Mỗi lượt có mã riêng (rid) để bảng điểm không ghi trùng khi gửi lại. */
+const GUI_URL = BAI.gui_url || "";
+/* Gói kết quả theo đúng mẫu ACTIVITY_RESULTS của Đấu trường: mode «review» = Ôn tập (chuyên cần tính riêng). */
+function goiDauTruong(r) {
+  const parts = Object.values(r.vong || {}).map(v => String(v).split("/").map(Number));
+  const dat = parts.reduce((a, x) => a + (x[0] || 0), 0), toi = parts.reduce((a, x) => a + (x[1] || 0), 0);
+  return { eventId: r.rid, mode: "review", subject: BAI.mon, grade: Number(BAI.khoi || 6), lessonId: BAI.id, lessonNo: 0,
+    lessonTitle: BAI.ten, studentId: r.ma, score: r.diem10, correct: Math.round(dat), total: toi,
+    durationSeconds: r.giay, startedAtMs: Date.parse(r.luc) - r.giay * 1000 };
+}
+function send(rec) {
+  if (!rec.ma || rec.ma === "THI-DOI") { flush(); return; }          // thi đội: chỉ lưu trên máy
+  const q = lsGet(QKEY, []); q.push(rec); lsSet(QKEY, q.slice(-300)); flush();
+}
+function trangThai(t) { const g = $("#gui"); if (g) g.textContent = t; }
+let dangGui = false;
+async function flush() {
+  const q = lsGet(QKEY, []);
+  const choGui = q.length;
+  if (!choGui) return;
+  const gs = window.google && google.script && google.script.run;   // mở ngay trong Web App Đấu trường
+  if (!GUI_URL && !gs) { trangThai(`Kết quả đã lưu trên máy (${choGui} lượt chờ gửi).`); return; }
+  if (!navigator.onLine) { trangThai(`📴 Chưa có mạng — đã lưu trên máy, có mạng em sẽ tự gửi (${choGui} lượt chờ).`); return; }
+  if (dangGui) return; dangGui = true;
+  const con = [];
+  for (const r of q) {
+    try {
+      const goi = goiDauTruong(r);
+      if (gs) await new Promise((ok, loi) => google.script.run.withSuccessHandler(x => (x && x.ok === false) ? loi(new Error(x.message)) : ok(x)).withFailureHandler(loi).saveArenaOfflineResult(goi));
+      else await fetch(GUI_URL, { method: "POST", mode: "no-cors", headers: { "Content-Type": "text/plain;charset=utf-8" },
+        body: JSON.stringify({ action: "ontap_result", data: goi }) });
+      const log = lsGet(LOGKEY, []); const x = log.find(y => y.rid === r.rid); if (x) { x.da_gui = new Date().toISOString(); lsSet(LOGKEY, log); }
+    } catch (e) { con.push(r); }
+  }
+  const moi = lsGet(QKEY, []).filter(r => !q.some(y => y.rid === r.rid));   // lượt mới thêm trong lúc gửi
+  lsSet(QKEY, con.concat(moi)); dangGui = false;
+  trangThai(con.length ? `Chưa gửi được ${con.length} lượt — em sẽ thử lại khi có mạng.` : "✔ Đã gửi kết quả về Đấu trường.");
+}
+addEventListener("message", e => { if (e.data && e.data.type === "ONTAP_ACK" && e.data.rid) lsSet(QKEY, lsGet(QKEY, []).filter(r => r.rid !== e.data.rid)); });
+setInterval(flush, 30000); setTimeout(flush, 1500);
+document.addEventListener("visibilitychange", () => { if (!document.hidden) flush(); });
+if ("serviceWorker" in navigator && location.protocol.startsWith("http") && !(window.google && google.script)) navigator.serviceWorker.register("sw.js").catch(() => {});
+
+/* ---------- lịch sử trên máy (cho giáo viên) ---------- */
+$("#btnLog").onclick = () => {
+  stopTimer();
+  const log = lsGet(LOGKEY, []).slice().reverse();
+  app.innerHTML = `<div class="card"><div class="row"><h2 style="margin:0">📒 Lịch sử lượt chơi trên máy này (${log.length})</h2><span class="grow"></span><button class="btn sm" id="csv">Tải CSV</button><button class="btn sm ghost" id="hm">Đóng</button></div>
+    <div style="overflow:auto;margin-top:10px"><table><tr><th>Lúc</th><th>Mã / Đội</th><th>Điểm /10</th><th>Từng vòng</th><th>Thời gian</th><th>Ý sai</th><th>Gửi</th></tr>
+    ${log.map(r => `<tr><td>${new Date(r.luc).toLocaleString("vi-VN")}</td><td>${esc(r.ma || "—")}${r.doi ? "<br>" + r.doi.map(esc).join("<br>") : ""}</td><td><b>${r.diem10}</b></td><td>${Object.entries(r.vong).map(([k, v]) => k.toUpperCase() + " " + v).join("<br>")}</td><td>${Math.floor(r.giay / 60)}′${r.giay % 60}″</td><td>${r.sai.length}</td><td>${r.da_gui ? "✔" : (r.ma && r.ma !== "THI-DOI" ? "⏳" : "—")}</td></tr>`).join("")}</table></div>
+    <div class="row" style="margin-top:10px"><button class="btn sm ghost" id="xoa">Xoá lịch sử trên máy</button></div></div>`;
+  $("#hm").onclick = home;
+  $("#xoa").onclick = () => { if (confirm("Xoá toàn bộ lịch sử lượt chơi trên máy này?")) { lsSet(LOGKEY, []); $("#btnLog").click(); } };
+  $("#csv").onclick = () => {
+    const rows = [["luc", "ma", "diem10", "vong", "giay", "so_y_sai", "y_sai"]].concat(log.map(r => [r.luc, r.ma, r.diem10, Object.entries(r.vong).map(([k, v]) => k + " " + v).join(" | "), r.giay, r.sai.length, r.sai.join(" | ")]));
+    const csv = "﻿" + rows.map(r => r.map(c => `"${String(c).replace(/"/g, '""')}"`).join(",")).join("\n");
+    const a = document.createElement("a"); a.href = URL.createObjectURL(new Blob([csv], { type: "text/csv" })); a.download = BAI.id + "_lich-su.csv"; a.click();
+  };
+};
+
+home();
+</script>
+</body>
+</html>

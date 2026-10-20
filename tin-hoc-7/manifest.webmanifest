@@ -1,0 +1,17 @@
+{
+ "name": "Ôn tập giữa kỳ I — Tin học 7",
+ "short_name": "Ôn GK1 Tin học 7",
+ "start_url": "./",
+ "scope": "./",
+ "display": "standalone",
+ "background_color": "#0b1640",
+ "theme_color": "#13235e",
+ "icons": [
+  {
+   "src": "icon.svg",
+   "sizes": "any",
+   "type": "image/svg+xml",
+   "purpose": "any"
+  }
+ ]
+}
