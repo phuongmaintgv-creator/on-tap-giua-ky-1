@@ -92,7 +92,6 @@ th{background:#eef1fb}
       <div class="identity"><span class="pill">TRƯỜNG THCS CHÁNH HƯNG</span><span class="pill">Tổ Tin học</span><span class="pill">Giáo viên: Ngô Thị Phương Mai</span></div>
       <div class="tacquyen">© 2026 Ngô Thị Phương Mai · Bản quyền nội dung thuộc tác giả</div>
     </div>
-    <span class="pill" id="hNet"></span>
     <button class="btn sm ghost" id="btnLog" title="Lịch sử các lượt chơi trên máy này">📒 Lịch sử</button>
   </header>
   <div id="teamBar" class="teams hide" style="margin-top:12px"></div>
@@ -117,8 +116,7 @@ const lsSet = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); } ca
 
 $("#hTitle").textContent = BAI.ten;
 $("#hSub").textContent = BAI.phamvi;
-function net() { $("#hNet").textContent = navigator.onLine ? "🟢 Có mạng" : "📴 Không mạng — vẫn chơi được"; }
-addEventListener("online", () => { net(); flush(); }); addEventListener("offline", net); net();
+addEventListener("online", () => flush());
 
 /* ---------- trạng thái ---------- */
 let S = null; // lượt chơi hiện tại
@@ -141,18 +139,17 @@ function home() {
   const tong = BAI.mc.length + BAI.tf.length + BAI.th.length + BAI.tl.length;
   app.innerHTML = `
   <div class="card">
-    <div class="row"><span class="tag">Ngân hàng: ${BAI.mc.length} câu trắc nghiệm · ${BAI.tf.length} câu đúng/sai (${BAI.tf.length * 4} ý) · ${BAI.th.length} bài thực hành · ${BAI.tl.length} câu tự luận</span></div>
-    <h2 style="margin:10px 0 6px">Chọn cách chơi</h2>
+        <h2 style="margin:0 0 10px">Chọn vòng chơi</h2>
     <div class="grid2" id="vongs">${VONG.map((v, i) => `<div class="vong on" data-i="${i}"><b>${v.icon} ${v.ten}</b>${v.mo}</div>`).join("")}</div>
     <div class="row" style="margin-top:14px">
-      <label><input type="radio" name="sl" value="luot" checked> Một lượt (mỗi vòng ${BAI.so.mc}/${BAI.so.tf}/${BAI.so.th}/${BAI.so.tl} câu, xáo mới mỗi lần)</label>
-      <label><input type="radio" name="sl" value="het"> Ôn hết ngân hàng (${tong} câu)</label>
+      <label><input type="radio" name="sl" value="luot" checked> Một lượt</label>
+      <label><input type="radio" name="sl" value="het"> Ôn hết ngân hàng</label>
     </div>
     <div class="grid2" style="margin-top:14px">
-      <div><label>Mã học sinh <span style="font-weight:400;color:var(--mute)">(bắt buộc khi chơi một mình · không ghi tên)</span></label><input type="text" id="ma" placeholder="VD ${(BAI.khoi || "6")[0]}A1-01" autocomplete="off" value="${esc(window.ARENA_SID || qs.get("ma") || qs.get("sid") || "")}"><div class="fb bad hide" id="maLoi" style="margin-top:6px;padding:8px 10px;font-size:15px"></div></div>
-      <div><label>Thi đội trên ti vi <span style="font-weight:400;color:var(--mute)">(tùy chọn · 2–6 đội, cách nhau dấu phẩy · khi thi đội không cần mã)</span></label><input type="text" id="doi" placeholder="VD: Đội 1, Đội 2, Đội 3, Đội 4"></div>
+      <div><label>Mã học sinh</label><input type="text" id="ma" autocomplete="off" value="${esc(window.ARENA_SID || qs.get("ma") || qs.get("sid") || "")}"><div class="fb bad hide" id="maLoi" style="margin-top:6px;padding:8px 10px;font-size:15px"></div></div>
+      <div><label>Thi đội <span style="font-weight:400;color:var(--mute)">(không bắt buộc)</span></label><input type="text" id="doi"></div>
     </div>
-    <div class="row" style="margin-top:16px"><button class="btn acc" id="go">▶ Bắt đầu</button><span class="prog">Mỗi vòng xong có giải thích và nguồn trong sách.</span></div>
+    <div class="row" style="margin-top:16px"><button class="btn acc" id="go">▶ Bắt đầu</button></div>
   </div>`;
   app.querySelectorAll(".vong").forEach(el => el.onclick = () => el.classList.toggle("on"));
   $("#ma").oninput = () => { $("#maLoi").classList.add("hide"); $("#ma").style.borderColor = ""; };
@@ -399,7 +396,7 @@ function finish() {
       `<div class="score">${thang10.toString().replace(".", ",")}</div><p style="text-align:center;font-size:20px">${msg}</p>`}
     <table style="margin-top:12px"><tr><th>Vòng</th><th>Kết quả</th></tr>${S.vongs.map(k => `<tr><td>${VONG.find(v => v.k === k).ten}</td><td>${Math.round(S.diem[k] * 100) / 100} / ${S.toi[k]}</td></tr>`).join("")}</table>
     ${S.sai.length ? `<details style="margin-top:12px"><summary>Các ý cần ôn lại (${S.sai.length})</summary><ul>${S.sai.map(s => `<li>${esc(s)}</li>`).join("")}</ul></details>` : ""}
-    <p class="prog" id="gui">${S.ma ? "Đang lưu và gửi kết quả…" : "Kết quả đã lưu trên máy này (📒 Lịch sử)."}</p>
+    <p class="prog" id="gui">${S.ma ? "Đang lưu kết quả…" : "Kết quả đã lưu trên máy này (📒 Lịch sử)."}</p>
     <div class="row"><button class="btn acc" id="again">🔁 Chơi lượt mới</button><button class="btn ghost" id="hm">Về đầu</button></div></div>`;
   $("#again").onclick = () => start(S.vongs, S.het, S.ma, S.doi ? S.doi.map(t => t.ten) : []);
   $("#hm").onclick = home;
@@ -429,8 +426,8 @@ async function flush() {
   const choGui = q.length;
   if (!choGui) return;
   const gs = window.google && google.script && google.script.run;   // mở ngay trong Web App Đấu trường
-  if (!GUI_URL && !gs) { trangThai(`Kết quả đã lưu trên máy (${choGui} lượt chờ gửi).`); return; }
-  if (!navigator.onLine) { trangThai(`📴 Chưa có mạng — đã lưu trên máy, có mạng em sẽ tự gửi (${choGui} lượt chờ).`); return; }
+  if (!GUI_URL && !gs) { trangThai("✔ Đã lưu kết quả."); return; }
+  if (!navigator.onLine) { trangThai("✔ Đã lưu kết quả."); return; }
   if (dangGui) return; dangGui = true;
   const con = [];
   for (const r of q) {
@@ -444,7 +441,7 @@ async function flush() {
   }
   const moi = lsGet(QKEY, []).filter(r => !q.some(y => y.rid === r.rid));   // lượt mới thêm trong lúc gửi
   lsSet(QKEY, con.concat(moi)); dangGui = false;
-  trangThai(con.length ? `Chưa gửi được ${con.length} lượt — em sẽ thử lại khi có mạng.` : "✔ Đã gửi kết quả về Đấu trường.");
+  trangThai("✔ Đã lưu kết quả.");
 }
 addEventListener("message", e => { if (e.data && e.data.type === "ONTAP_ACK" && e.data.rid) lsSet(QKEY, lsGet(QKEY, []).filter(r => r.rid !== e.data.rid)); });
 setInterval(flush, 30000); setTimeout(flush, 1500);
