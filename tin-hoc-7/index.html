@@ -17,6 +17,7 @@ header h1{font-size:clamp(20px,3.2vw,34px);margin:0;letter-spacing:.5px}
 header .sub{color:#c9d3ff;font-size:14px}
 .pill{background:rgba(255,255,255,.12);border-radius:999px;padding:6px 12px;font-size:14px}
 .identity{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}.identity .pill{font-size:12px;padding:4px 10px}
+.ai{margin-top:10px}.aib{background:none;border:1px solid #c8d2f0;border-radius:999px;padding:5px 12px;font-size:14px;color:#2f4a9a;cursor:pointer;font-family:inherit}.aib:disabled{opacity:.6}.ait{font-size:15px;color:#33406b;margin-top:6px;line-height:1.45}
 .tacquyen{font-size:11px;color:#9fb0e6;margin-top:6px}
 .grow{flex:1}
 .card{background:var(--card);color:var(--ink);border-radius:18px;padding:20px;box-shadow:0 10px 30px rgba(0,0,0,.25);margin-top:16px}
@@ -219,12 +220,26 @@ function startTimer(sec, onEnd) {
 }
 function stopTimer() { if (T) clearInterval(T); T = null; }
 
+/* ---------- AI: gợi ý trước khi chốt, giải thích sau khi chốt (chỉ khi mở trong Đấu trường và có mạng) ---------- */
+const coAI = () => !!(window.google && google.script && google.script.run) && navigator.onLine;
+const aiKhung = (id, nhan) => coAI() ? `<div class="ai" id="${id}"><button class="aib" type="button">${nhan}</button><div class="ait"></div></div>` : "";
+function ganAI(id, ham, q) {
+  const k = $("#" + id); if (!k) return;
+  const b = k.querySelector(".aib"), t = k.querySelector(".ait");
+  b.onclick = () => {
+    b.disabled = true; b.textContent = "…";
+    google.script.run.withSuccessHandler(r => { if (r && r.ok) { t.textContent = r.text; b.remove(); } else k.remove(); })
+      .withFailureHandler(() => k.remove())[ham](Object.assign({ mon: BAI.mon, baiId: BAI.id, ma: S && S.ma || "" }, q));
+  };
+}
+
 /* ---------- vòng 1: trắc nghiệm ---------- */
 function showMC(it) {
   const opts = shuf(it.opts.map((t, i) => ({ t, ok: i === 0 })));
   app.innerHTML = `<div class="card">${head("mc", it)}<div class="q">${esc(it.q)}</div>
     <div class="timer"><i id="tbar"></i></div><div class="prog" id="tsec"></div>
-    <div class="opts">${opts.map((o, i) => `<button class="opt" data-i="${i}"><span class="k">${"ABCD"[i]}</span>${esc(o.t)}</button>`).join("")}</div><div id="fb"></div></div>`;
+    <div class="opts">${opts.map((o, i) => `<button class="opt" data-i="${i}"><span class="k">${"ABCD"[i]}</span>${esc(o.t)}</button>`).join("")}</div>${aiKhung("aiH", "💡 Gợi ý")}<div id="fb"></div></div>`;
+  ganAI("aiH", "goiYOnTap", { cau: it.q, phuongAn: it.opts, dapAn: [it.opts[0]] });
   let done = false;
   const end = (i) => {
     if (done) return; done = true; stopTimer();
@@ -234,7 +249,9 @@ function showMC(it) {
     if (i != null && !ok) btns[i].classList.add("bad");
     cong("mc", ok ? 1 : 0, 1);
     if (!ok) S.sai.push("TN: " + it.q.slice(0, 60));
-    $("#fb").outerHTML = `<div class="fb ${ok ? "ok" : "bad"}">${ok ? "🎉 Chính xác!" : (i == null ? "⏰ Hết giờ! " : "Chưa đúng. ") + "Đáp án: <b>" + esc(it.opts[0]) + "</b>"}${it.gt ? `<div>${esc(it.gt)}</div>` : ""}${it.src ? `<div class="src">📖 ${esc(it.src)}</div>` : ""}</div>` + nextBtn();
+    const hb = $("#aiH .aib"); if (hb) $("#aiH").remove();
+    $("#fb").outerHTML = `<div class="fb ${ok ? "ok" : "bad"}">${ok ? "🎉 Chính xác!" : (i == null ? "⏰ Hết giờ! " : "Chưa đúng. ") + "Đáp án: <b>" + esc(it.opts[0]) + "</b>"}${it.gt ? `<div>${esc(it.gt)}</div>` : ""}${it.src ? `<div class="src">📖 ${esc(it.src)}</div>` : ""}${aiKhung("aiG", "🤖 Giải thích")}</div>` + nextBtn();
+    ganAI("aiG", "giaiThichOnTap", { cau: it.q, phuongAn: it.opts, dapAn: [it.opts[0]], emChon: i != null ? opts[i].t : "" });
     bindNext();
   };
   app.querySelectorAll(".opt").forEach(b => b.onclick = () => end(+b.dataset.i));
@@ -248,7 +265,9 @@ function showTF(it) {
   app.innerHTML = `<div class="card">${head("tf", it)}<div class="q">${esc(it.q)}</div>
     <div class="timer"><i id="tbar"></i></div><div class="prog" id="tsec"></div>
     <div id="tfl">${ys.map((y, i) => `<div class="tf" data-i="${i}"><div><b>${y.n})</b> ${esc(y.t)}<div class="src gx hide"></div></div><div class="bt"><button class="btn ghost sm" data-v="1">Đúng</button><button class="btn ghost sm" data-v="0">Sai</button></div></div>`).join("")}</div>
-    <div class="row" style="margin-top:12px"><button class="btn ok" id="chk">Chốt đáp án</button></div><div id="fb"></div></div>`;
+    ${aiKhung("aiH", "💡 Gợi ý")}<div class="row" style="margin-top:12px"><button class="btn ok" id="chk">Chốt đáp án</button></div><div id="fb"></div></div>`;
+  const tfCau = it.q + " " + ys.map(y => y.n + ") " + y.t).join(" ; ");
+  ganAI("aiH", "goiYOnTap", { cau: tfCau, phuongAn: [], dapAn: [] });
   app.querySelectorAll(".tf").forEach(r => r.querySelectorAll("button").forEach(b => b.onclick = () => {
     ans[r.dataset.i] = b.dataset.v === "1"; r.querySelectorAll("button").forEach(x => x.classList.remove("sel")); b.classList.add("sel");
   }));
@@ -265,7 +284,9 @@ function showTF(it) {
     });
     cong("tf", dung / 4, 1);
     $("#chk").remove();
-    $("#fb").outerHTML = `<div class="fb ${dung === 4 ? "ok" : "bad"}">Đúng ${dung}/4 ý.${it.src ? `<div class="src">📖 ${esc(it.src)}</div>` : ""}</div>` + nextBtn();
+    if ($("#aiH .aib")) $("#aiH").remove();
+    $("#fb").outerHTML = `<div class="fb ${dung === 4 ? "ok" : "bad"}">Đúng ${dung}/4 ý.${it.src ? `<div class="src">📖 ${esc(it.src)}</div>` : ""}${aiKhung("aiG", "🤖 Giải thích")}</div>` + nextBtn();
+    ganAI("aiG", "giaiThichOnTap", { cau: tfCau, phuongAn: [], dapAn: ys.map(y => y.n + ") " + (y.d ? "Đúng" : "Sai")) });
     bindNext();
   };
   $("#chk").onclick = end;
@@ -341,7 +362,9 @@ function showTL(it) {
   if (it.t === "mo") return showOpen(it);
   app.innerHTML = `<div class="card">${head("tl", it)}<div class="q">${esc(it.q)}</div>
     <div class="grid2">${it.o.map((o, i) => `<div><label>${esc(o.n)}</label><input type="text" data-i="${i}" autocomplete="off"></div>`).join("")}</div>
-    <div class="row" style="margin-top:12px"><button class="btn ok" id="chk">Nộp câu trả lời</button></div><div id="fb"></div></div>`;
+    ${aiKhung("aiH", "💡 Gợi ý")}<div class="row" style="margin-top:12px"><button class="btn ok" id="chk">Nộp câu trả lời</button></div><div id="fb"></div></div>`;
+  const tlCau = it.q + " " + it.o.map(o => o.n).join(" ; "), tlDung = it.o.map(o => o.a[0]);
+  ganAI("aiH", "goiYOnTap", { cau: tlCau, phuongAn: [], dapAn: tlDung });
   const ins = app.querySelectorAll("input"); ins[0].focus();
   ins.forEach(x => x.onkeydown = e => { if (e.key === "Enter") $("#chk").click(); });
   $("#chk").onclick = () => {
@@ -349,7 +372,9 @@ function showTL(it) {
     ins.forEach(x => { const o = it.o[+x.dataset.i], v = norm(x.value); const ok = o.a.some(a => norm(a) === v); if (ok) d++; else S.sai.push("TL: " + o.n.slice(0, 40)); x.style.borderColor = ok ? "var(--ok)" : "var(--bad)"; x.disabled = true; if (!ok) x.value += "   ✗ đáp án: " + o.a[0]; });
     cong("tl", d / it.o.length, 1);
     $("#chk").remove();
-    $("#fb").outerHTML = `<div class="fb ${d === it.o.length ? "ok" : "bad"}">Đúng ${d}/${it.o.length} ô.${it.gt ? `<div>${esc(it.gt)}</div>` : ""}${it.src ? `<div class="src">📖 ${esc(it.src)}</div>` : ""}</div>` + nextBtn();
+    if ($("#aiH .aib")) $("#aiH").remove();
+    $("#fb").outerHTML = `<div class="fb ${d === it.o.length ? "ok" : "bad"}">Đúng ${d}/${it.o.length} ô.${it.gt ? `<div>${esc(it.gt)}</div>` : ""}${it.src ? `<div class="src">📖 ${esc(it.src)}</div>` : ""}${aiKhung("aiG", "🤖 Giải thích")}</div>` + nextBtn();
+    ganAI("aiG", "giaiThichOnTap", { cau: tlCau, phuongAn: [], dapAn: tlDung });
     bindNext();
   };
 }
